@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>Superset安装部署 - ChavinKing</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="ChavinKing" /><meta name="description" content="1、安装python环境 superset运行要求python3.6环境 1）安装miniconda 下载地址：https://repo.anac" /><meta name="keywords" content="data warehouse, Github, flink, java, spark" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.68.3 with theme even" />
+
+
+<link rel="canonical" href="https://chavinking.github.io/post/dw/supserset%E5%AE%89%E8%A3%85%E9%83%A8%E7%BD%B2/" />
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+<link href="/sass/main.min.8c3cbcb0324c2bb4875ceccba4007cbad4b4ac8377f33af9953c3e7684534a50.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.css" integrity="sha256-7TyXnr2YU040zfSP+rEcz29ggW4j56/ujTPwjMzyqFY=" crossorigin="anonymous">
+<link rel="stylesheet" href="/css/reset-even.css">
+
+
+<meta property="og:title" content="Superset安装部署" />
+<meta property="og:description" content="1、安装python环境 superset运行要求python3.6环境 1）安装miniconda 下载地址：https://repo.anac" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://chavinking.github.io/post/dw/supserset%E5%AE%89%E8%A3%85%E9%83%A8%E7%BD%B2/" />
+<meta property="article:published_time" content="2020-08-11T01:37:56+08:00" />
+<meta property="article:modified_time" content="2020-08-11T01:37:56+08:00" />
+<meta itemprop="name" content="Superset安装部署">
+<meta itemprop="description" content="1、安装python环境 superset运行要求python3.6环境 1）安装miniconda 下载地址：https://repo.anac">
+<meta itemprop="datePublished" content="2020-08-11T01:37:56&#43;08:00" />
+<meta itemprop="dateModified" content="2020-08-11T01:37:56&#43;08:00" />
+<meta itemprop="wordCount" content="1398">
+
+
+
+<meta itemprop="keywords" content="SQL,优化," /><meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Superset安装部署"/>
+<meta name="twitter:description" content="1、安装python环境 superset运行要求python3.6环境 1）安装miniconda 下载地址：https://repo.anac"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">ChavinKing</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">首页</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">归档</li>
+      </a><a href="/categories/">
+        <li class="mobile-menu-item">分类</li>
+      </a><a href="/tags/">
+        <li class="mobile-menu-item">标签</li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">关于我</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">ChavinKing</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">首页</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">归档</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/categories/">分类</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/tags/">标签</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/about/">关于我</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">Superset安装部署</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2020-08-11 01:37 </span>
+        <div class="post-category">
+            <a href="/categories/SQL/"> SQL </a>
+            </div>
+          <span class="more-meta"> 约 1398 字 </span>
+          <span class="more-meta"> 预计阅读 3 分钟 </span>
+        <span id="busuanzi_container_page_pv" class="more-meta"> <span id="busuanzi_value_page_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> 次阅读 </span>
+      </div>
+    </header>
+
+    <div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">文章目录</h2>
+  <div class="post-toc-content">
+    <nav id="TableOfContents"></nav>
+  </div>
+</div>
+    <div class="post-content">
+      <p>1、安装python环境</p>
+<p>superset运行要求python3.6环境</p>
+<p>1）安装miniconda 
+下载地址：https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh</p>
+<p>2）安装miniconda</p>
+<p>sh Miniconda3-latest-Linux-x86_64.sh</p>
+<p>是否每次登陆自动激活base环境：conda config &ndash;set auto_activate_base false</p>
+<p>3）创建python3.6环境</p>
+<p>配置conda国内镜像 
+bin/conda config &ndash;add channels <a href="https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/free">https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/free</a> 
+bin/conda config &ndash;add channels <a href="https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/main">https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/main</a> 
+bin/conda config &ndash;set show_channel_urls yes</p>
+<p>创建python3.6环境 
+bin/conda create &ndash;name superset python=3.6</p>
+<p>附件：
+conda环境管理命令 
+创建环境：conda create -n env_name 
+查看所有环境：conda info -envs 
+删除环境: conda remove -n env_name &ndash;all</p>
+<p>4）激活superset环境：
+bin/conda activate superset</p>
+<p>停止superset环境：
+bin/conda deactivate</p>
+<p>5）查看python版本信息</p>
+<p>(superset) [root@chavin miniconda3]# python
+Python 3.6.10 |Anaconda, Inc.| (default, Mar 25 2020, 23:51:54) 
+[GCC 7.3.0] on linux
+Type &ldquo;help&rdquo;, &ldquo;copyright&rdquo;, &ldquo;credits&rdquo; or &ldquo;license&rdquo; for more information.
+&gt;&raquo;</p>
+<p>2、安装superset</p>
+<p>1）安装superset环境依赖</p>
+<p>sudo yum upgrade python-setuptools
+sudo yum install gcc gcc-c++ libffi-devel python-devel python-pip python-wheel openssl-devel cyrus-sasl-devel openldap-devel</p>
+<p>2）通过获取最新的pip 和setuptools库，将所有机会都放在您的身边。：</p>
+<p>bin/pip install &ndash;upgrade setuptools pip -i <a href="https://pypi.douban.com/simple/">https://pypi.douban.com/simple/</a></p>
+<p>3）安装superset ：依赖较多，可能较慢</p>
+<p>bin/pip install apache-superset -i <a href="https://pypi.douban.com/simple/">https://pypi.douban.com/simple/</a></p>
+<p>4）编写superset配置文件，主要更改元数据配置信息</p>
+<p>a)配置python环境变量：
+$ vim ~/.bash_profile</p>
+<p>PYTHONPATH=&rdquo;/opt/miniconda3/conf:{$PYTHONPATH}&rdquo;
+export PYTHONPATH</p>
+<p>b)编写配置文件 
+$ vim /opt/miniconda/conf/superset_config.py</p>
+<p>#&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;
+# Superset specific config
+#&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;
+ROW_LIMIT = 5000</p>
+<p>SUPERSET_WEBSERVER_PORT = 8088
+#&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;</p>
+<p>#&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;
+# Flask App Builder configuration
+#&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;
+# Your App secret key
+SECRET_KEY = &lsquo;\2\1thisismyscretkey\1\2\e\y\y\h&rsquo;</p>
+<p># The SQLAlchemy connection string to your database backend
+# This connection defines the path to the database that stores your
+# superset metadata (slices, connections, tables, dashboards, &hellip;).
+# Note that the connection information to connect to the datasources
+# you want to explore are managed directly in the web UI</p>
+<p># 注释掉默认数据库 ，同时配置mysql元数据库地址
+# SQLALCHEMY_DATABASE_URI = &lsquo;sqlite:////path/to/superset.db&rsquo; 
+SQLALCHEMY_DATABASE_URI = &lsquo;mysql://superset:mysql@chavin.king/superset&rsquo;</p>
+<p># Flask-WTF flag for CSRF
+WTF_CSRF_ENABLED = True
+# Add endpoints that need to be exempt from CSRF protection
+WTF_CSRF_EXEMPT_LIST = []
+# A CSRF token that expires in 1 year
+WTF_CSRF_TIME_LIMIT = 60 * 60 * 24 * 365</p>
+<p># Set this API key to enable Mapbox visualizations
+MAPBOX_API_KEY = '&rsquo;</p>
+<p>5）初始化数据库 
+a）首先对接mysql数据源：
+bin/conda install mysqlclient</p>
+<p>b）执行superset初始化 
+bin/superset db upgrade</p>
+<p>附加 - 此处可能报错如下：
+Traceback (most recent call last):
+File &ldquo;bin/superset&rdquo;, line 18, in <!-- raw HTML omitted -->
+from superset.cli import superset
+File &ldquo;/opt/miniconda3/lib/python3.7/site-packages/superset/<strong>init</strong>.py&rdquo;, line 21, in <!-- raw HTML omitted -->
+from superset.app import create_app
+File &ldquo;/opt/miniconda3/lib/python3.7/site-packages/superset/app.py&rdquo;, line 43, in <!-- raw HTML omitted -->
+from superset.security import SupersetSecurityManager
+File &ldquo;/opt/miniconda3/lib/python3.7/site-packages/superset/security/<strong>init</strong>.py&rdquo;, line 17, in <!-- raw HTML omitted -->
+from superset.security.manager import SupersetSecurityManager # noqa: F401
+File &ldquo;/opt/miniconda3/lib/python3.7/site-packages/superset/security/manager.py&rdquo;, line 25, in <!-- raw HTML omitted -->
+from flask_appbuilder.security.sqla.manager import SecurityManager
+File &ldquo;/opt/miniconda3/lib/python3.7/site-packages/flask_appbuilder/security/sqla/manager.py&rdquo;, line 19, in <!-- raw HTML omitted -->
+from ..manager import BaseSecurityManager
+File &ldquo;/opt/miniconda3/lib/python3.7/site-packages/flask_appbuilder/security/manager.py&rdquo;, line 17, in <!-- raw HTML omitted -->
+from .registerviews import (
+File &ldquo;/opt/miniconda3/lib/python3.7/site-packages/flask_appbuilder/security/registerviews.py&rdquo;, line 10, in <!-- raw HTML omitted -->
+from .forms import LoginForm_oid, RegisterUserDBForm, RegisterUserOIDForm
+File &ldquo;/opt/miniconda3/lib/python3.7/site-packages/flask_appbuilder/security/forms.py&rdquo;, line 54, in <!-- raw HTML omitted -->
+class RegisterUserDBForm(DynamicForm):
+File &ldquo;/opt/miniconda3/lib/python3.7/site-packages/flask_appbuilder/security/forms.py&rdquo;, line 72, in RegisterUserDBForm
+validators=[DataRequired(), Email()],
+File &ldquo;/opt/miniconda3/lib/python3.7/site-packages/wtforms/validators.py&rdquo;, line 332, in <strong>init</strong>
+raise Exception(&ldquo;Install &lsquo;email_validator&rsquo; for email validation support.&quot;)
+Exception: Install &lsquo;email_validator&rsquo; for email validation support.</p>
+<p>解决办法 - bin/pip install email_validator</p>
+<p>错误2 - 初始化数据库失败 
+Loaded your LOCAL configuration at [/opt/miniconda3/conf/superset_config.py]
+Failed to create app
+Traceback (most recent call last):
+File &ldquo;/opt/miniconda3/lib/python3.7/site-packages/superset/app.py&rdquo;, line 59, in create_app
+app_initializer.init_app()
+File &ldquo;/opt/miniconda3/lib/python3.7/site-packages/superset/app.py&rdquo;, line 464, in init_app
+self.setup_db()
+File &ldquo;/opt/miniconda3/lib/python3.7/site-packages/superset/app.py&rdquo;, line 592, in setup_db
+pessimistic_connection_handling(db.engine)
+File &ldquo;/opt/miniconda3/lib/python3.7/site-packages/flask_sqlalchemy/init.py&rdquo;, line 937, in engine
+return self.get_engine()
+File &ldquo;/opt/miniconda3/lib/python3.7/site-packages/flask_sqlalchemy/init.py&rdquo;, line 956, in get_engine
+return connector.get_engine()
+File &ldquo;/opt/miniconda3/lib/python3.7/site-packages/flask_sqlalchemy/init.py&rdquo;, line 561, in get_engine
+self.engine = rv = self.sa.create_engine(sa_url, options)
+File &ldquo;/opt/miniconda3/lib/python3.7/site-packages/flask_sqlalchemy/init.py&rdquo;, line 966, in create_engine
+return sqlalchemy.create_engine(sa_url, engine_opts)
+File &ldquo;/opt/miniconda3/lib/python3.7/site-packages/sqlalchemy/engine/init.py&rdquo;, line 479, in create_engine
+return strategy.create(*args, kwargs)
+File &ldquo;/opt/miniconda3/lib/python3.7/site-packages/sqlalchemy/engine/strategies.py&rdquo;, line 87, in create
+dbapi = dialect_cls.dbapi(dbapi_args)
+File &ldquo;/opt/miniconda3/lib/python3.7/site-packages/sqlalchemy/dialects/mysql/mysqldb.py&rdquo;, line 118, in dbapi
+return import(&ldquo;MySQLdb&rdquo;)
+ModuleNotFoundError: No module named &lsquo;MySQLdb&rsquo;
+Traceback (most recent call last):
+File &ldquo;bin/superset&rdquo;, line 21, in <!-- raw HTML omitted -->
+superset()
+File &ldquo;/opt/miniconda3/lib/python3.7/site-packages/click/core.py&rdquo;, line 829, in call
+return self.main(*args, kwargs)
+File &ldquo;/opt/miniconda3/lib/python3.7/site-packages/flask/cli.py&rdquo;, line 586, in main
+return super(FlaskGroup, self).main(args, kwargs)
+File &ldquo;/opt/miniconda3/lib/python3.7/site-packages/click/core.py&rdquo;, line 782, in main
+rv = self.invoke(ctx)
+File &ldquo;/opt/miniconda3/lib/python3.7/site-packages/click/core.py&rdquo;, line 1256, in invoke
+Command.invoke(self, ctx)
+File &ldquo;/opt/miniconda3/lib/python3.7/site-packages/click/core.py&rdquo;, line 1066, in invoke
+return ctx.invoke(self.callback, ctx.params)
+File &ldquo;/opt/miniconda3/lib/python3.7/site-packages/click/core.py&rdquo;, line 610, in invoke
+return callback(args, kwargs)
+File &ldquo;/opt/miniconda3/lib/python3.7/site-packages/click/decorators.py&rdquo;, line 21, in new_func
+return f(get_current_context(), *args, kwargs)
+File &ldquo;/opt/miniconda3/lib/python3.7/site-packages/flask/cli.py&rdquo;, line 425, in decorator
+with ctx.ensure_object(ScriptInfo).load_app().app_context():
+File &ldquo;/opt/miniconda3/lib/python3.7/site-packages/flask/cli.py&rdquo;, line 381, in load_app
+app = call_factory(self, self.create_app)
+File &ldquo;/opt/miniconda3/lib/python3.7/site-packages/flask/cli.py&rdquo;, line 119, in call_factory
+return app_factory()
+File &ldquo;/opt/miniconda3/lib/python3.7/site-packages/superset/app.py&rdquo;, line 66, in create_app
+raise ex
+File &ldquo;/opt/miniconda3/lib/python3.7/site-packages/superset/app.py&rdquo;, line 59, in create_app
+app_initializer.init_app()
+File &ldquo;/opt/miniconda3/lib/python3.7/site-packages/superset/app.py&rdquo;, line 464, in init_app
+self.setup_db()
+File &ldquo;/opt/miniconda3/lib/python3.7/site-packages/superset/app.py&rdquo;, line 592, in setup_db
+pessimistic_connection_handling(db.engine)
+File &ldquo;/opt/miniconda3/lib/python3.7/site-packages/flask_sqlalchemy/init.py&rdquo;, line 937, in engine
+return self.get_engine()
+File &ldquo;/opt/miniconda3/lib/python3.7/site-packages/flask_sqlalchemy/init.py&rdquo;, line 956, in get_engine
+return connector.get_engine()
+File &ldquo;/opt/miniconda3/lib/python3.7/site-packages/flask_sqlalchemy/init.py&rdquo;, line 561, in get_engine
+self.engine = rv = self.sa.create_engine(sa_url, options)
+File &ldquo;/opt/miniconda3/lib/python3.7/site-packages/flask_sqlalchemy/init.py&rdquo;, line 966, in create_engine
+return sqlalchemy.create_engine(sa_url, **engine_opts)
+File &ldquo;/opt/miniconda3/lib/python3.7/site-packages/sqlalchemy/engine/init.py&rdquo;, line 479, in create_engine
+return strategy.create(*args, kwargs)
+File &ldquo;/opt/miniconda3/lib/python3.7/site-packages/sqlalchemy/engine/strategies.py&rdquo;, line 87, in create
+dbapi = dialect_cls.dbapi(dbapi_args)
+File &ldquo;/opt/miniconda3/lib/python3.7/site-packages/sqlalchemy/dialects/mysql/mysqldb.py&rdquo;, line 118, in dbapi
+return import__(&ldquo;MySQLdb&rdquo;)
+ModuleNotFoundError: No module named &lsquo;MySQLdb&rsquo;</p>
+<p>解决办法 - bin/pip install mysqlclient</p>
+<p>6）创建管理员用户 
+export FLASK_APP=superset
+bin/superset fab create-admin</p>
+<p>7）初始化superset 
+bin/superset init</p>
+<p>8）启动superset</p>
+<p>a）安装gunicorn 
+bin/pip install gunicorn -i <a href="https://pypi.douban.com/simple/">https://pypi.douban.com/simple/</a></p>
+<p>b）启动superset ，确保当前环境为superset 
+bin/gunicorn &ndash;workers 2 &ndash;timeout 120 &ndash;bind chavin.king:8088 &ldquo;superset.app:create_app()&rdquo;</p>
+<p>&ndash;workers : 指定进程个数 
+&ndash;timeout ：worker进程超时时间，超时会自动重启 
+&ndash;bind : 绑定本机地址 ，即superset访问地址</p>
+<p>或者</p>
+<p>bin/superset run -h 0.0.0.0 -p 8088 &ndash;with-threads &ndash;reload &ndash;debugger</p>
+<p>c）停止superset 
+ps -ef|awk &lsquo;/gunicorn/ %% !/awk/{print $2}&rsquo; | xargs kill -9</p>
+<p>d）退出superset 
+conda deactivate</p>
+<p>e）登录superset 
+<a href="http://chavin.king">http://chavin.king</a>:8088
+chavin/superset</p>
+
+    </div>
+
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">文章作者</span>
+    <span class="item-content">ChavinKing</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">上次更新</span>
+    <span class="item-content">
+        2020-08-11 01:37
+        
+    </span>
+  </p>
+  
+  <p class="copyright-item">
+    <span class="item-title">许可协议</span>
+    <span class="item-content"><a target="_blank" rel="license noopener" href="https://github.com/nusr/blog/blob/master/LICENSE">MIT</a></span>
+  </p>
+</div>
+<div class="post-reward">
+  <input type="checkbox" name="reward" id="reward" hidden />
+  <label class="reward-button" for="reward">赞赏支持</label>
+  <div class="qr-code">
+    
+    <label class="qr-code-image" for="reward">
+        <img class="image" src="/images/">
+        <span>微信打赏</span>
+      </label>
+    <label class="qr-code-image" for="reward">
+        <img class="image" src="/images/">
+        <span>支付宝打赏</span>
+      </label>
+  </div>
+</div><footer class="post-footer">
+      <div class="post-tags">
+          <a href="/tags/SQL/">SQL</a>
+          <a href="/tags/%E4%BC%98%E5%8C%96/">优化</a>
+          </div>
+      <nav class="post-nav">
+        <a class="prev" href="/post/sql/SQL%E4%BC%98%E5%8C%96/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">SQL优化</span>
+            <span class="prev-text nav-mobile">上一篇</span>
+          </a>
+        <a class="next" href="/post/sql/%E4%B8%A4%E4%B8%AA%E5%B7%A6%E8%BF%9E%E6%8E%A5SQL%E6%89%A7%E8%A1%8C%E8%AE%A1%E5%88%92%E8%A7%A3%E6%9E%90Oracle%E5%92%8CPGSQL%E5%AF%B9%E6%AF%94/">
+            <span class="next-text nav-default">两个左连接SQL执行计划解析（Oracle和PGSQL对比）</span>
+            <span class="next-text nav-mobile">下一篇</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="http://www.cnblogs.com/wcwen1990" class="iconfont icon-cnblogs" title="cnblogs"></a>
+      <a href="mailto:chavinking1990@gmail.com" class="iconfont icon-email" title="email"></a>
+      <a href="https://github.com/chavinking" class="iconfont icon-github" title="github"></a>
+  <a href="https://chavinking.github.io/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    由 <a class="hexo-link" href="https://gohugo.io">Hugo</a> 强力驱动
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    主题 - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  <div class="busuanzi-footer">
+    <span id="busuanzi_container_site_pv"> 本站总访问量 <span id="busuanzi_value_site_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> 次 </span>
+      <span class="division">|</span>
+    <span id="busuanzi_container_site_uv"> 本站总访客数 <span id="busuanzi_value_site_uv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> 人 </span>
+  </div>
+
+  <span class="copyright-year">
+    &copy; 
+    2017 - 
+    2020
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">ChavinKing</span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/slideout@1.0.1/dist/slideout.min.js" integrity="sha256-t+zJ/g8/KXIJMjSVQdnibt4dlaDxc9zXr/9oNPeWqdg=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.js" integrity="sha256-XVLffZaxoWfGUEbdzuLi7pwaUJv1cecsQJQqGLe7axY=" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/timeago.js@3.0.2/dist/timeago.min.js" integrity="sha256-jwCP0NAdCBloaIWTWHmW4i3snUNMHUNO+jr9rYd2iOI=" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/timeago.js@3.0.2/dist/timeago.locales.min.js" integrity="sha256-ZwofwC1Lf/faQCzN7nZtfijVV6hSwxjQMwXL4gn9qU8=" crossorigin="anonymous"></script>
+  <script><!-- NOTE: timeago.js uses the language code format like "zh_CN" (underscore and case sensitive) -->
+    var languageCode = "zh-CN".replace(/-/g, '_').replace(/_(.*)/, function ($0, $1) {return $0.replace($1, $1.toUpperCase());});
+    timeago().render(document.querySelectorAll('.timeago'), languageCode);
+    timeago.cancel();  
+  </script>
+
+
+
+<script type="text/javascript" src="/js/main.min.d7b7ada643c9c1a983026e177f141f7363b4640d619caf01d8831a6718cd44ea.js"></script>
+
+
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'UA-138883536-1', 'auto');
+	ga('set', 'anonymizeIp', true);
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+
+
+
+
+
+
+
+</body>
+</html>

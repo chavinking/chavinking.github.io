@@ -39,6 +39,15 @@
     </item>
     
     <item>
+      <title>Superset安装部署</title>
+      <link>https://chavinking.github.io/post/dw/supserset%E5%AE%89%E8%A3%85%E9%83%A8%E7%BD%B2/</link>
+      <pubDate>Tue, 11 Aug 2020 01:37:56 +0800</pubDate>
+      
+      <guid>https://chavinking.github.io/post/dw/supserset%E5%AE%89%E8%A3%85%E9%83%A8%E7%BD%B2/</guid>
+      <description>1、安装python环境 superset运行要求python3.6环境 1）安装miniconda 下载地址：https://repo.anac</description>
+    </item>
+    
+    <item>
       <title>两个左连接SQL执行计划解析（Oracle和PGSQL对比）</title>
       <link>https://chavinking.github.io/post/sql/%E4%B8%A4%E4%B8%AA%E5%B7%A6%E8%BF%9E%E6%8E%A5SQL%E6%89%A7%E8%A1%8C%E8%AE%A1%E5%88%92%E8%A7%A3%E6%9E%90Oracle%E5%92%8CPGSQL%E5%AF%B9%E6%AF%94/</link>
       <pubDate>Tue, 11 Aug 2020 01:37:56 +0800</pubDate>
