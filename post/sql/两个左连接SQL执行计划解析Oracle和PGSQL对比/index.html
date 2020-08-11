@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>两个左连接SQL执行计划解析（Oracle和PGSQL对比） - ChavinKing</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="ChavinKing" /><meta name="description" content="上一篇解析链接如下： https://www.cnblogs.com/wcwen1990/p/9325968.html 1、SQL示例1： SQL&amp;gt; select * from ( select * from tmp1 where c &amp;gt;= 1 ) t1 left join ( select * from tmp2 where b &amp;lt; 30 ) t2 on t1.a = t2.a and t2.d &amp;gt; 1 and t1.e &amp;gt;= 2 where t1.b &amp;lt; 50 ; A B C E A" /><meta name="keywords" content="data warehouse, Github, flink, java, spark" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.68.3 with theme even" />
+
+
+<link rel="canonical" href="https://chavinking.github.io/post/sql/%E4%B8%A4%E4%B8%AA%E5%B7%A6%E8%BF%9E%E6%8E%A5SQL%E6%89%A7%E8%A1%8C%E8%AE%A1%E5%88%92%E8%A7%A3%E6%9E%90Oracle%E5%92%8CPGSQL%E5%AF%B9%E6%AF%94/" />
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+<link href="/sass/main.min.8c3cbcb0324c2bb4875ceccba4007cbad4b4ac8377f33af9953c3e7684534a50.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.css" integrity="sha256-7TyXnr2YU040zfSP+rEcz29ggW4j56/ujTPwjMzyqFY=" crossorigin="anonymous">
+<link rel="stylesheet" href="/css/reset-even.css">
+
+
+<meta property="og:title" content="两个左连接SQL执行计划解析（Oracle和PGSQL对比）" />
+<meta property="og:description" content="上一篇解析链接如下： https://www.cnblogs.com/wcwen1990/p/9325968.html 1、SQL示例1： SQL&gt; select * from ( select * from tmp1 where c &gt;= 1 ) t1 left join ( select * from tmp2 where b &lt; 30 ) t2 on t1.a = t2.a and t2.d &gt; 1 and t1.e &gt;= 2 where t1.b &lt; 50 ; A B C E A" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://chavinking.github.io/post/sql/%E4%B8%A4%E4%B8%AA%E5%B7%A6%E8%BF%9E%E6%8E%A5SQL%E6%89%A7%E8%A1%8C%E8%AE%A1%E5%88%92%E8%A7%A3%E6%9E%90Oracle%E5%92%8CPGSQL%E5%AF%B9%E6%AF%94/" />
+<meta property="article:published_time" content="2020-08-11T01:37:56+08:00" />
+<meta property="article:modified_time" content="2020-08-11T01:37:56+08:00" />
+<meta itemprop="name" content="两个左连接SQL执行计划解析（Oracle和PGSQL对比）">
+<meta itemprop="description" content="上一篇解析链接如下： https://www.cnblogs.com/wcwen1990/p/9325968.html 1、SQL示例1： SQL&gt; select * from ( select * from tmp1 where c &gt;= 1 ) t1 left join ( select * from tmp2 where b &lt; 30 ) t2 on t1.a = t2.a and t2.d &gt; 1 and t1.e &gt;= 2 where t1.b &lt; 50 ; A B C E A">
+<meta itemprop="datePublished" content="2020-08-11T01:37:56&#43;08:00" />
+<meta itemprop="dateModified" content="2020-08-11T01:37:56&#43;08:00" />
+<meta itemprop="wordCount" content="2026">
+
+
+
+<meta itemprop="keywords" content="SQL,优化," /><meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="两个左连接SQL执行计划解析（Oracle和PGSQL对比）"/>
+<meta name="twitter:description" content="上一篇解析链接如下： https://www.cnblogs.com/wcwen1990/p/9325968.html 1、SQL示例1： SQL&gt; select * from ( select * from tmp1 where c &gt;= 1 ) t1 left join ( select * from tmp2 where b &lt; 30 ) t2 on t1.a = t2.a and t2.d &gt; 1 and t1.e &gt;= 2 where t1.b &lt; 50 ; A B C E A"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">ChavinKing</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">首页</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">归档</li>
+      </a><a href="/categories/">
+        <li class="mobile-menu-item">分类</li>
+      </a><a href="/tags/">
+        <li class="mobile-menu-item">标签</li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">关于我</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">ChavinKing</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">首页</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">归档</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/categories/">分类</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/tags/">标签</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/about/">关于我</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">两个左连接SQL执行计划解析（Oracle和PGSQL对比）</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2020-08-11 01:37 </span>
+        <div class="post-category">
+            <a href="/categories/SQL/"> SQL </a>
+            </div>
+          <span class="more-meta"> 约 2026 字 </span>
+          <span class="more-meta"> 预计阅读 5 分钟 </span>
+        <span id="busuanzi_container_page_pv" class="more-meta"> <span id="busuanzi_value_page_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> 次阅读 </span>
+      </div>
+    </header>
+
+    <div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">文章目录</h2>
+  <div class="post-toc-content">
+    <nav id="TableOfContents">
+  <ul>
+    <li><a href="#execution-plan">Execution Plan</a></li>
+    <li><a href="#-id---operation----name--rows---bytes--cost-cpu-time--">| Id  | Operation	   | Name | Rows  | Bytes | Cost (%CPU)| Time	  |</a></li>
+    <li><a href="#--3----table-access-full-tmp2-1-----52-3---0-000001-">|   0 | SELECT STATEMENT   |	  |	4 |   416 |	7  (15)| 00:00:01 |
+|*  1 |  HASH JOIN OUTER   |	  |	4 |   416 |	7  (15)| 00:00:01 |
+|*  2 |   TABLE ACCESS FULL| TMP1 |	4 |   208 |	3   (0)| 00:00:01 |
+|*  3 |   TABLE ACCESS FULL| TMP2 |	1 |    52 |	3   (0)| 00:00:01 |</a></li>
+    <li><a href="#predicate-information-identified-by-operation-id">Predicate Information (identified by operation id):</a></li>
+    <li><a href="#note">Note</a></li>
+    <li><a href="#statistics">Statistics</a></li>
+    <li><a href="#query-plan">postgres=# explain analyze select * 
+postgres-# from (
+postgres(# select * from tmp1 where c &gt;= 1
+postgres(# ) t1 left join (
+postgres(# select * from tmp2 where b &lt; 30
+postgres(# ) t2 on t1.a = t2.a 
+postgres-# and t2.d &gt; 1 and t1.e &gt;= 2 
+postgres-# where t1.b &lt; 50 
+postgres-# ;
+QUERY PLAN</a></li>
+    <li><a href="#execution-plan-1">Execution Plan</a></li>
+    <li><a href="#-id---operation----name--rows---bytes--cost-cpu-time---1">| Id  | Operation	   | Name | Rows  | Bytes | Cost (%CPU)| Time	  |</a></li>
+    <li><a href="#--3----table-access-full-tmp1-3----156-3---0-000001-">|   0 | SELECT STATEMENT   |	  |	1 |   104 |	7  (15)| 00:00:01 |
+|*  1 |  HASH JOIN	   |	  |	1 |   104 |	7  (15)| 00:00:01 |
+|*  2 |   TABLE ACCESS FULL| TMP2 |	1 |    52 |	3   (0)| 00:00:01 |
+|*  3 |   TABLE ACCESS FULL| TMP1 |	3 |   156 |	3   (0)| 00:00:01 |</a></li>
+    <li><a href="#predicate-information-identified-by-operation-id-1">Predicate Information (identified by operation id):</a></li>
+    <li><a href="#note-1">Note</a></li>
+    <li><a href="#statistics-1">Statistics</a></li>
+    <li><a href="#query-plan-1">postgres=# explain analyze select * 
+postgres-# from (
+postgres(# select * from tmp1 where c &gt;= 1
+postgres(# ) t1 left join (
+postgres(# select * from tmp2 where b &lt; 30
+postgres(# ) t2 on t1.a = t2.a 
+postgres-# and t2.d &gt; 1 and t1.e &gt;= 2 
+postgres-# where t1.b &lt; 50 and t2.e &lt;= 3 
+postgres-# ;
+QUERY PLAN</a></li>
+  </ul>
+</nav>
+  </div>
+</div>
+    <div class="post-content">
+      <p>上一篇解析链接如下：
+<a href="https://www.cnblogs.com/wcwen1990/p/9325968.html">https://www.cnblogs.com/wcwen1990/p/9325968.html</a></p>
+<p>1、SQL示例1：</p>
+<p>SQL&gt; select * 
+from (
+select * from tmp1 where c &gt;= 1
+) t1 left join (
+select * from tmp2 where b &lt; 30
+) t2 on t1.a = t2.a 
+and t2.d &gt; 1 and t1.e &gt;= 2 
+where t1.b &lt; 50 
+;</p>
+<pre><code> A	    B	       C	  E	     A		B	   D	      E
+</code></pre>
+<hr>
+<pre><code> 2	   20	       2	  2	     2	       20	   2	      2
+ 4	   40	       4	  4
+ 3	   30	       3	  3
+ 1	   10	       1	  1
+</code></pre>
+<h2 id="execution-plan">Execution Plan</h2>
+<p>Plan hash value: 2592321047</p>
+<hr>
+<h2 id="-id---operation----name--rows---bytes--cost-cpu-time--">| Id  | Operation	   | Name | Rows  | Bytes | Cost (%CPU)| Time	  |</h2>
+<h2 id="--3----table-access-full-tmp2-1-----52-3---0-000001-">|   0 | SELECT STATEMENT   |	  |	4 |   416 |	7  (15)| 00:00:01 |
+|*  1 |  HASH JOIN OUTER   |	  |	4 |   416 |	7  (15)| 00:00:01 |
+|*  2 |   TABLE ACCESS FULL| TMP1 |	4 |   208 |	3   (0)| 00:00:01 |
+|*  3 |   TABLE ACCESS FULL| TMP2 |	1 |    52 |	3   (0)| 00:00:01 |</h2>
+<h2 id="predicate-information-identified-by-operation-id">Predicate Information (identified by operation id):</h2>
+<p>1 - access(&ldquo;TMP1&rdquo;.&ldquo;A&quot;=&quot;TMP2&rdquo;.&ldquo;A&rdquo;(+))
+filter(&ldquo;TMP1&rdquo;.&ldquo;E&quot;&gt;=CASE	WHEN (&ldquo;TMP2&rdquo;.&ldquo;A&rdquo;(+) IS NOT NULL) THEN 2
+ELSE 2 END )
+2 - filter(&ldquo;TMP1&rdquo;.&ldquo;B&quot;&lt;50 AND &ldquo;C&quot;&gt;=1)
+3 - filter(&ldquo;TMP2&rdquo;.&ldquo;D&rdquo;(+)&gt;1 AND &ldquo;B&rdquo;(+)&lt;30)</p>
+<h2 id="note">Note</h2>
+<ul>
+<li>dynamic sampling used for this statement (level=2)</li>
+</ul>
+<h2 id="statistics">Statistics</h2>
+<pre><code>  0  recursive calls
+  0  db block gets
+  7  consistent gets
+  0  physical reads
+  0  redo size
+   1082  bytes sent via SQL*Net to client
+524  bytes received via SQL*Net from client
+  2  SQL*Net roundtrips to/from client
+  0  sorts (memory)
+  0  sorts (disk)
+  4  rows processed
+</code></pre>
+<h2 id="query-plan">postgres=# explain analyze select * 
+postgres-# from (
+postgres(# select * from tmp1 where c &gt;= 1
+postgres(# ) t1 left join (
+postgres(# select * from tmp2 where b &lt; 30
+postgres(# ) t2 on t1.a = t2.a 
+postgres-# and t2.d &gt; 1 and t1.e &gt;= 2 
+postgres-# where t1.b &lt; 50 
+postgres-# ;
+QUERY PLAN</h2>
+<p>Hash Left Join  (cost=34.90..80.00 rows=181 width=32) (actual time=0.021..0.035 rows=4 loops=1)
+Hash Cond: (&ldquo;outer&rdquo;.a = &ldquo;inner&rdquo;.a)
+Join Filter: (&ldquo;outer&rdquo;.e &gt;= 2)
+-&gt;  Seq Scan on tmp1  (cost=0.00..34.45 rows=181 width=16) (actual time=0.006..0.011 rows=4 loops=1)
+Filter: ((c &gt;= 1) AND (b &lt; 50))
+-&gt;  Hash  (cost=34.45..34.45 rows=181 width=16) (actual time=0.007..0.007 rows=1 loops=1)
+-&gt;  Seq Scan on tmp2  (cost=0.00..34.45 rows=181 width=16) (actual time=0.002..0.003 rows=1 loops=1)
+Filter: ((b &lt; 30) AND (d &gt; 1))
+Total runtime: 0.063 ms
+(9 rows)</p>
+<p>SQL执行计划的分析：</p>
+<ol>
+<li>全表扫描左表TMP1，同时根据TMP1表子查询条件&quot;C&quot;&gt;=1和where过滤条件&quot;T1&rdquo;.&ldquo;B&quot;&lt;50联合过滤，即filter(&ldquo;TMP1&rdquo;.&ldquo;B&quot;&lt;50 AND &ldquo;C&quot;&gt;=1)，计算结果临时表记为tmp1；</li>
+<li>全表扫描右表TMP2，同时根据TMP2表子查询条件&quot;B&rdquo;(+)&lt;30和on子句&quot;T2&rdquo;.&ldquo;D&rdquo;(+)&gt;1联合过滤，即filter(&ldquo;TMP2&rdquo;.&ldquo;D&rdquo;(+)&gt;1 AND &ldquo;B&rdquo;(+)&lt;30)，计算结果临时表记为tmp2；</li>
+<li>左表TMP1及右表TMP2处理后临时表tmp1和tmp2通过access(&ldquo;TMP1&rdquo;.&ldquo;A&quot;=&quot;TMP2&rdquo;.&ldquo;A&rdquo;(+))连接条件进行Hash Left Join操作，左临时表结果集全量返回，右表不匹配行置为null，返回结果临时表记为tmp3；</li>
+<li>返回结果集。</li>
+</ol>
+<p>2、SQL示例2：</p>
+<p>SQL&gt; select * 
+from (
+select * from tmp1 where c &gt;= 1
+) t1 left join (
+select * from tmp2 where b &lt; 30
+) t2 on t1.a = t2.a 
+and t2.d &gt; 1 and t1.e &gt;= 2 
+where t1.b &lt; 50 and t2.e &lt;= 3 
+;</p>
+<pre><code> A	    B	       C	  E	     A		B	   D	      E
+</code></pre>
+<hr>
+<pre><code> 2	   20	       2	  2	     2	       20	   2	      2
+</code></pre>
+<h2 id="execution-plan-1">Execution Plan</h2>
+<p>Plan hash value: 1630095649</p>
+<hr>
+<h2 id="-id---operation----name--rows---bytes--cost-cpu-time---1">| Id  | Operation	   | Name | Rows  | Bytes | Cost (%CPU)| Time	  |</h2>
+<h2 id="--3----table-access-full-tmp1-3----156-3---0-000001-">|   0 | SELECT STATEMENT   |	  |	1 |   104 |	7  (15)| 00:00:01 |
+|*  1 |  HASH JOIN	   |	  |	1 |   104 |	7  (15)| 00:00:01 |
+|*  2 |   TABLE ACCESS FULL| TMP2 |	1 |    52 |	3   (0)| 00:00:01 |
+|*  3 |   TABLE ACCESS FULL| TMP1 |	3 |   156 |	3   (0)| 00:00:01 |</h2>
+<h2 id="predicate-information-identified-by-operation-id-1">Predicate Information (identified by operation id):</h2>
+<p>1 - access(&ldquo;TMP1&rdquo;.&ldquo;A&quot;=&quot;TMP2&rdquo;.&ldquo;A&rdquo;)
+2 - filter(&ldquo;TMP2&rdquo;.&ldquo;E&quot;&lt;=3 AND &ldquo;TMP2&rdquo;.&ldquo;D&quot;&gt;1 AND &ldquo;B&quot;&lt;30)
+3 - filter(&ldquo;TMP1&rdquo;.&ldquo;B&quot;&lt;50 AND &ldquo;TMP1&rdquo;.&ldquo;E&quot;&gt;=2 AND &ldquo;C&quot;&gt;=1)</p>
+<h2 id="note-1">Note</h2>
+<ul>
+<li>dynamic sampling used for this statement (level=2)</li>
+</ul>
+<h2 id="statistics-1">Statistics</h2>
+<pre><code>  9  recursive calls
+  0  db block gets
+ 15  consistent gets
+  0  physical reads
+  0  redo size
+981  bytes sent via SQL*Net to client
+524  bytes received via SQL*Net from client
+  2  SQL*Net roundtrips to/from client
+  0  sorts (memory)
+  0  sorts (disk)
+  1  rows processed
+</code></pre>
+<p>SQL&gt;</p>
+<p>postgres=# select * 
+postgres-# from (
+postgres(# select * from tmp1 where c &gt;= 1
+postgres(# ) t1 left join (
+postgres(# select * from tmp2 where b &lt; 30
+postgres(# ) t2 on t1.a = t2.a 
+postgres-# and t2.d &gt; 1 and t1.e &gt;= 2 
+postgres-# where t1.b &lt; 50 and t2.e &lt;= 3 
+postgres-# ;
+a | b  | c | e | a | b  | d | e 
+&mdash;+&mdash;-+&mdash;+&mdash;+&mdash;+&mdash;-+&mdash;+&mdash;
+2 | 20 | 2 | 2 | 2 | 20 | 2 | 2
+(1 row)</p>
+<h2 id="query-plan-1">postgres=# explain analyze select * 
+postgres-# from (
+postgres(# select * from tmp1 where c &gt;= 1
+postgres(# ) t1 left join (
+postgres(# select * from tmp2 where b &lt; 30
+postgres(# ) t2 on t1.a = t2.a 
+postgres-# and t2.d &gt; 1 and t1.e &gt;= 2 
+postgres-# where t1.b &lt; 50 and t2.e &lt;= 3 
+postgres-# ;
+QUERY PLAN</h2>
+<p>Hash Join  (cost=38.68..78.43 rows=18 width=32) (actual time=0.033..0.041 rows=1 loops=1)
+Hash Cond: (&ldquo;outer&rdquo;.a = &ldquo;inner&rdquo;.a)
+-&gt;  Seq Scan on tmp1  (cost=0.00..38.53 rows=60 width=16) (actual time=0.007..0.011 rows=3 loops=1)
+Filter: ((c &gt;= 1) AND (e &gt;= 2) AND (b &lt; 50))
+-&gt;  Hash  (cost=38.53..38.53 rows=60 width=16) (actual time=0.008..0.008 rows=1 loops=1)
+-&gt;  Seq Scan on tmp2  (cost=0.00..38.53 rows=60 width=16) (actual time=0.003..0.005 rows=1 loops=1)
+Filter: ((b &lt; 30) AND (d &gt; 1) AND (e &lt;= 3))
+Total runtime: 0.070 ms
+(8 rows)</p>
+<p>postgres=#</p>
+<p>SQL执行计划的分析：</p>
+<ol>
+<li>全表扫描左表TMP2，同时根据TMP2表子查询条件&quot;B&quot;&lt;30和where过滤条件&quot;TMP2&rdquo;.&ldquo;E&quot;&lt;=3及ON子句过滤条件&quot;TMP2&rdquo;.&ldquo;D&quot;&gt;1联合过滤，即filter(&ldquo;TMP2&rdquo;.&ldquo;E&quot;&lt;=3 AND &ldquo;TMP2&rdquo;.&ldquo;D&quot;&gt;1 AND &ldquo;B&quot;&lt;30)，计算结果临时表记为tmp1；</li>
+<li>全表扫描右表TMP1，同时根据TMP1表子查询条件&quot;C&quot;&gt;=1和where子句过滤条件&quot;TMP1&rdquo;.&ldquo;B&quot;&lt;50及ON子句&quot;TMP1&rdquo;.&ldquo;E&quot;&gt;=2联合过滤，即filter(&ldquo;TMP1&rdquo;.&ldquo;B&quot;&lt;50 AND &ldquo;TMP1&rdquo;.&ldquo;E&quot;&gt;=2 AND &ldquo;C&quot;&gt;=1)，计算结果临时表记为tmp2；</li>
+<li>临时表tmp1和tmp2通过access(&ldquo;TMP1&rdquo;.&ldquo;A&quot;=&quot;TMP2&rdquo;.&ldquo;A&rdquo;)连接条件进行Hash Join连接操作（此处left join写法已经被转换为内链接），返回匹配结果临时表记为tmp3；</li>
+<li>返回结果集。</li>
+</ol>
+
+    </div>
+
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">文章作者</span>
+    <span class="item-content">ChavinKing</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">上次更新</span>
+    <span class="item-content">
+        2020-08-11 01:37
+        
+    </span>
+  </p>
+  
+  <p class="copyright-item">
+    <span class="item-title">许可协议</span>
+    <span class="item-content"><a target="_blank" rel="license noopener" href="https://github.com/nusr/blog/blob/master/LICENSE">MIT</a></span>
+  </p>
+</div>
+<div class="post-reward">
+  <input type="checkbox" name="reward" id="reward" hidden />
+  <label class="reward-button" for="reward">赞赏支持</label>
+  <div class="qr-code">
+    
+    <label class="qr-code-image" for="reward">
+        <img class="image" src="/images/">
+        <span>微信打赏</span>
+      </label>
+    <label class="qr-code-image" for="reward">
+        <img class="image" src="/images/">
+        <span>支付宝打赏</span>
+      </label>
+  </div>
+</div><footer class="post-footer">
+      <div class="post-tags">
+          <a href="/tags/SQL/">SQL</a>
+          <a href="/tags/%E4%BC%98%E5%8C%96/">优化</a>
+          </div>
+      <nav class="post-nav">
+        <a class="prev" href="/post/sql/SQL%E4%BC%98%E5%8C%96/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">SQL优化</span>
+            <span class="prev-text nav-mobile">上一篇</span>
+          </a>
+        <a class="next" href="/post/dw/%E5%A2%9E%E9%87%8FETL-%E9%95%BF%E5%91%A8%E6%9C%9F%E6%8C%87%E6%A0%87-%E4%BC%98%E5%8C%96%E6%96%B9%E6%A1%88/">
+            <span class="next-text nav-default">增量ETL (长周期指标) 优化方案</span>
+            <span class="next-text nav-mobile">下一篇</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="http://www.cnblogs.com/wcwen1990" class="iconfont icon-cnblogs" title="cnblogs"></a>
+      <a href="mailto:chavinking1990@gmail.com" class="iconfont icon-email" title="email"></a>
+      <a href="https://github.com/chavinking" class="iconfont icon-github" title="github"></a>
+  <a href="https://chavinking.github.io/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    由 <a class="hexo-link" href="https://gohugo.io">Hugo</a> 强力驱动
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    主题 - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  <div class="busuanzi-footer">
+    <span id="busuanzi_container_site_pv"> 本站总访问量 <span id="busuanzi_value_site_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> 次 </span>
+      <span class="division">|</span>
+    <span id="busuanzi_container_site_uv"> 本站总访客数 <span id="busuanzi_value_site_uv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> 人 </span>
+  </div>
+
+  <span class="copyright-year">
+    &copy; 
+    2017 - 
+    2020
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">ChavinKing</span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/slideout@1.0.1/dist/slideout.min.js" integrity="sha256-t+zJ/g8/KXIJMjSVQdnibt4dlaDxc9zXr/9oNPeWqdg=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.js" integrity="sha256-XVLffZaxoWfGUEbdzuLi7pwaUJv1cecsQJQqGLe7axY=" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/timeago.js@3.0.2/dist/timeago.min.js" integrity="sha256-jwCP0NAdCBloaIWTWHmW4i3snUNMHUNO+jr9rYd2iOI=" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/timeago.js@3.0.2/dist/timeago.locales.min.js" integrity="sha256-ZwofwC1Lf/faQCzN7nZtfijVV6hSwxjQMwXL4gn9qU8=" crossorigin="anonymous"></script>
+  <script><!-- NOTE: timeago.js uses the language code format like "zh_CN" (underscore and case sensitive) -->
+    var languageCode = "zh-CN".replace(/-/g, '_').replace(/_(.*)/, function ($0, $1) {return $0.replace($1, $1.toUpperCase());});
+    timeago().render(document.querySelectorAll('.timeago'), languageCode);
+    timeago.cancel();  
+  </script>
+
+
+
+<script type="text/javascript" src="/js/main.min.d7b7ada643c9c1a983026e177f141f7363b4640d619caf01d8831a6718cd44ea.js"></script>
+
+
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'UA-138883536-1', 'auto');
+	ga('set', 'anonymizeIp', true);
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+
+
+
+
+
+
+
+</body>
+</html>

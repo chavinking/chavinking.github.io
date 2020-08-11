@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>ETL增量采集方法 - ChavinKing</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="ChavinKing" /><meta name="description" content="1、触发器方式 触发器方式是普遍采取的一种增量抽取机制。该方式是根据抽取要求，在要被抽取的源表上建立插入、修改、删除3个触发器，每当源表中的数" /><meta name="keywords" content="data warehouse, Github, flink, java, spark" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.68.3 with theme even" />
+
+
+<link rel="canonical" href="https://chavinking.github.io/post/sql/ETL%E5%A2%9E%E9%87%8F%E9%87%87%E9%9B%86%E6%96%B9%E6%B3%95/" />
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+<link href="/sass/main.min.8c3cbcb0324c2bb4875ceccba4007cbad4b4ac8377f33af9953c3e7684534a50.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.css" integrity="sha256-7TyXnr2YU040zfSP+rEcz29ggW4j56/ujTPwjMzyqFY=" crossorigin="anonymous">
+<link rel="stylesheet" href="/css/reset-even.css">
+
+
+<meta property="og:title" content="ETL增量采集方法" />
+<meta property="og:description" content="1、触发器方式 触发器方式是普遍采取的一种增量抽取机制。该方式是根据抽取要求，在要被抽取的源表上建立插入、修改、删除3个触发器，每当源表中的数" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://chavinking.github.io/post/sql/ETL%E5%A2%9E%E9%87%8F%E9%87%87%E9%9B%86%E6%96%B9%E6%B3%95/" />
+<meta property="article:published_time" content="2020-08-11T01:37:56+08:00" />
+<meta property="article:modified_time" content="2020-08-11T01:37:56+08:00" />
+<meta itemprop="name" content="ETL增量采集方法">
+<meta itemprop="description" content="1、触发器方式 触发器方式是普遍采取的一种增量抽取机制。该方式是根据抽取要求，在要被抽取的源表上建立插入、修改、删除3个触发器，每当源表中的数">
+<meta itemprop="datePublished" content="2020-08-11T01:37:56&#43;08:00" />
+<meta itemprop="dateModified" content="2020-08-11T01:37:56&#43;08:00" />
+<meta itemprop="wordCount" content="1917">
+
+
+
+<meta itemprop="keywords" content="ETL," /><meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="ETL增量采集方法"/>
+<meta name="twitter:description" content="1、触发器方式 触发器方式是普遍采取的一种增量抽取机制。该方式是根据抽取要求，在要被抽取的源表上建立插入、修改、删除3个触发器，每当源表中的数"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">ChavinKing</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">首页</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">归档</li>
+      </a><a href="/categories/">
+        <li class="mobile-menu-item">分类</li>
+      </a><a href="/tags/">
+        <li class="mobile-menu-item">标签</li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">关于我</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">ChavinKing</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">首页</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">归档</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/categories/">分类</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/tags/">标签</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/about/">关于我</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">ETL增量采集方法</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2020-08-11 01:37 </span>
+        <div class="post-category">
+            <a href="/categories/ETL/"> ETL </a>
+            </div>
+          <span class="more-meta"> 约 1917 字 </span>
+          <span class="more-meta"> 预计阅读 4 分钟 </span>
+        <span id="busuanzi_container_page_pv" class="more-meta"> <span id="busuanzi_value_page_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> 次阅读 </span>
+      </div>
+    </header>
+
+    <div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">文章目录</h2>
+  <div class="post-toc-content">
+    <nav id="TableOfContents"></nav>
+  </div>
+</div>
+    <div class="post-content">
+      <p>1、触发器方式</p>
+<p>触发器方式是普遍采取的一种增量抽取机制。该方式是根据抽取要求，在要被抽取的源表上建立插入、修改、删除3个触发器，每当源表中的数据发生变化，就被相应的触发器将变化的数据写入一个增量日志表，ETL的增量抽取则是从增量日志表中而不是直接在源表中抽取数据，同时增量日志表中抽取过的数据要及时被标记或删除。为了简单起见，增量日志表一般不存储增量数据的所有字段信息，而只是存储源表名称、更新的关键字值和更新操作类型(KNSEN、UPDATE或DELETE)，ETL增量抽取进程首先根据源表名称和更新的关键字值，从源表中提取对应的完整记录，再根据更新操作类型，对目标表进行相应的处理。</p>
+<p>2、时间戳方式</p>
+<p>时间戳方式是指增量抽取时，抽取进程通过比较系统时间与抽取源表的时间戳字段的值来决定抽取哪些数据。这种方式需要在源表上增加一个时间戳字段，系统中更新修改表数据的时候，同时修改时间戳字段的值。有的数据库(例如SQL SERVER)的时间戳支持自动更新，即表的其它字段的数据发生改变时，时间戳字段的值会被自动更新为记录改变的时刻。在这种情下，进行ETL实施时就只需要在源表加上时间戳字段就可以了。对于不支持时间戳自动更新的数据库，这就要求业务系统在更新业务数据时，通过编程的方式手工更新时间戳字段。使用时间戳方式可以正常捕获源表的插入和更新操作，但对于delete操作则无能为力，需要结合其它机制才能完成。</p>
+<p>3、全表删除插入方式</p>
+<p>全表删除插入方式是指每次抽取前先删除目标表数据，抽取时全新加载数据。该方式实际上将增量抽取等同于全量抽取。对于数据量不大，全量抽取的时间代价小于执行增量抽取的算法和条件代价时，可以采用该方式。</p>
+<p>4、全表比对方式</p>
+<p>全表比对即在增量抽取时，ETL进程逐条比较源表和目标表的记录，将新增和修改的记录读取出来。优化之后的全部比对方式是采用MD5校验码，需要事先为要抽取的表建立一个结构类似的MD5临时表，该临时表记录源表的主键值以及根据源表所有字段的数据计算出来的MD5校验码，每次进行数据抽取时，对源表和MD5临时表进行MD5校验码的比对，如有不同，进行UPDATE操作：如目标表没有存在该主键值，表示该记录还没有，则进行INSERT操作。然后，还需要对在源表中已不存在而目标表仍保留的主键值，执行DELETE操作。</p>
+<p>5、日志表方式</p>
+<p>对于建立了业务系统的生产数据库，可以在数据库中创建业务日志表，当特定需要监控的业务数据发生变化时，由相应的业务系统程序模块来更新维护日志表内容。增量抽取时，通过读日志表数据决定加载哪些数据及如何加载。日志表的维护需要由业务系统程序用代码来完成。</p>
+<p>6、系统日志分析方式</p>
+<p>该方式通过分析数据库自身的日志来判断变化的数据。关系犁数据库系统都会将所有的DML操作存储在日志文件中，以实现数据库的备份和还原功能。ETL增晕抽取进程通过对数据库的日志进行分析，提取对相关源表在特定时间后发生的DML操作信息，就可以得知自上次抽取时刻以来该表的数据变化情况，从而指导增量抽取动作。有些数据库系统提供了访问日志的专用的程序包(例如ORACLE的LOGMINDER)，使数据库日志的分析工作得到大大简化。</p>
+<p>7、Oracle数据库方式</p>
+<p>1）ORACLE改变数据捕获(CHANGED DATA CAPTURE，CDC)方式：ORACLE CDC特性是在ORAELE 9I数据库中引入的。CDC能够帮助识别从上次抽取之后发生变化的数据。利用CDC，在对源表进行INSERT、UPCLATE或DELETE等操作的同时就可以提取数据，并且变化的数据被保存在数据库的变化表中。这样就可以捕获发生变化的数据，然后利用数据库视图以一种可控的方式提供给ETL抽取进程，作为增量抽取的依据。CDC方式对源表数据变化情况的捕获有两种方式：同步CDC和异步CDC。同步CDC使用源数据库触发器来捕获变更的数据，这种方式是实时的，没有任何延迟，当DML操作提交后，变更表中就产生了变更数据。异步CDC使用数据库重做日志(REDO LOG)文件，在源数据库发生变更以后，才进行数据捕获。
+2）ORACLE闪回查询方式：ORACLE 9I以上版本的数据库系统提供了闪回查询机制，允许用户查询过去某个时刻的数据库状态。这样，抽取进程可以将源数据库的当前状态和上次抽取时刻的状态进行对比，快速得出源表数据记录的变化情况。</p>
+<p>8、由业务系统提供增量数据</p>
+<p>有些应用场景，比如涉及政府相关行业的数据采集，可能某些数据库不允许外部主动采集，这时可能解决办法是由业务系统方直接提供增量数据。</p>
+<p>9、可以通过flume等相关工具自动采集</p>
+<p>某些数据源比较适合使用flume进行采集，比如业务系统访问日志。</p>
+
+    </div>
+
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">文章作者</span>
+    <span class="item-content">ChavinKing</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">上次更新</span>
+    <span class="item-content">
+        2020-08-11 01:37
+        
+    </span>
+  </p>
+  
+  <p class="copyright-item">
+    <span class="item-title">许可协议</span>
+    <span class="item-content"><a target="_blank" rel="license noopener" href="https://github.com/nusr/blog/blob/master/LICENSE">MIT</a></span>
+  </p>
+</div>
+<div class="post-reward">
+  <input type="checkbox" name="reward" id="reward" hidden />
+  <label class="reward-button" for="reward">赞赏支持</label>
+  <div class="qr-code">
+    
+    <label class="qr-code-image" for="reward">
+        <img class="image" src="/images/">
+        <span>微信打赏</span>
+      </label>
+    <label class="qr-code-image" for="reward">
+        <img class="image" src="/images/">
+        <span>支付宝打赏</span>
+      </label>
+  </div>
+</div><footer class="post-footer">
+      <div class="post-tags">
+          <a href="/tags/ETL/">ETL</a>
+          </div>
+      <nav class="post-nav">
+        
+        <a class="next" href="/post/java/Spark%E6%A0%B8%E5%BF%83%E7%AE%97%E5%AD%90/">
+            <span class="next-text nav-default">Spark核心算子</span>
+            <span class="next-text nav-mobile">下一篇</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="http://www.cnblogs.com/wcwen1990" class="iconfont icon-cnblogs" title="cnblogs"></a>
+      <a href="mailto:chavinking1990@gmail.com" class="iconfont icon-email" title="email"></a>
+      <a href="https://github.com/chavinking" class="iconfont icon-github" title="github"></a>
+  <a href="https://chavinking.github.io/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    由 <a class="hexo-link" href="https://gohugo.io">Hugo</a> 强力驱动
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    主题 - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  <div class="busuanzi-footer">
+    <span id="busuanzi_container_site_pv"> 本站总访问量 <span id="busuanzi_value_site_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> 次 </span>
+      <span class="division">|</span>
+    <span id="busuanzi_container_site_uv"> 本站总访客数 <span id="busuanzi_value_site_uv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> 人 </span>
+  </div>
+
+  <span class="copyright-year">
+    &copy; 
+    2017 - 
+    2020
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">ChavinKing</span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/slideout@1.0.1/dist/slideout.min.js" integrity="sha256-t+zJ/g8/KXIJMjSVQdnibt4dlaDxc9zXr/9oNPeWqdg=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.js" integrity="sha256-XVLffZaxoWfGUEbdzuLi7pwaUJv1cecsQJQqGLe7axY=" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/timeago.js@3.0.2/dist/timeago.min.js" integrity="sha256-jwCP0NAdCBloaIWTWHmW4i3snUNMHUNO+jr9rYd2iOI=" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/timeago.js@3.0.2/dist/timeago.locales.min.js" integrity="sha256-ZwofwC1Lf/faQCzN7nZtfijVV6hSwxjQMwXL4gn9qU8=" crossorigin="anonymous"></script>
+  <script><!-- NOTE: timeago.js uses the language code format like "zh_CN" (underscore and case sensitive) -->
+    var languageCode = "zh-CN".replace(/-/g, '_').replace(/_(.*)/, function ($0, $1) {return $0.replace($1, $1.toUpperCase());});
+    timeago().render(document.querySelectorAll('.timeago'), languageCode);
+    timeago.cancel();  
+  </script>
+
+
+
+<script type="text/javascript" src="/js/main.min.d7b7ada643c9c1a983026e177f141f7363b4640d619caf01d8831a6718cd44ea.js"></script>
+
+
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'UA-138883536-1', 'auto');
+	ga('set', 'anonymizeIp', true);
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+
+
+
+
+
+
+
+</body>
+</html>
