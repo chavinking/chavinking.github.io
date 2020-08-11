@@ -21,6 +21,15 @@
     </item>
     
     <item>
+      <title>MongoDB分片集群原理、搭建及测试详解</title>
+      <link>https://chavinking.github.io/post/sql/MongoDB%E5%88%86%E7%89%87%E9%9B%86%E7%BE%A4%E5%8E%9F%E7%90%86%E6%90%AD%E5%BB%BA%E5%8F%8A%E6%B5%8B%E8%AF%95%E8%AF%A6%E8%A7%A3/</link>
+      <pubDate>Tue, 11 Aug 2020 01:37:56 +0800</pubDate>
+      
+      <guid>https://chavinking.github.io/post/sql/MongoDB%E5%88%86%E7%89%87%E9%9B%86%E7%BE%A4%E5%8E%9F%E7%90%86%E6%90%AD%E5%BB%BA%E5%8F%8A%E6%B5%8B%E8%AF%95%E8%AF%A6%E8%A7%A3/</guid>
+      <description>随着技术的发展，目前数据库系统对于海量数据的存储和高效访问海量数据要求越来越高，MongoDB分片机制就是为了解决海量数据的存储和高效海量数</description>
+    </item>
+    
+    <item>
       <title>Spark核心算子</title>
       <link>https://chavinking.github.io/post/java/Spark%E6%A0%B8%E5%BF%83%E7%AE%97%E5%AD%90/</link>
       <pubDate>Tue, 11 Aug 2020 01:37:56 +0800</pubDate>
