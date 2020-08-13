@@ -12,48 +12,12 @@
     
     
     <item>
-      <title>MongoDB分片集群原理、搭建及测试详解</title>
-      <link>https://chavinking.github.io/post/sql/MongoDB%E5%88%86%E7%89%87%E9%9B%86%E7%BE%A4%E5%8E%9F%E7%90%86%E6%90%AD%E5%BB%BA%E5%8F%8A%E6%B5%8B%E8%AF%95%E8%AF%A6%E8%A7%A3/</link>
-      <pubDate>Tue, 11 Aug 2020 01:37:56 +0800</pubDate>
-      
-      <guid>https://chavinking.github.io/post/sql/MongoDB%E5%88%86%E7%89%87%E9%9B%86%E7%BE%A4%E5%8E%9F%E7%90%86%E6%90%AD%E5%BB%BA%E5%8F%8A%E6%B5%8B%E8%AF%95%E8%AF%A6%E8%A7%A3/</guid>
-      <description>随着技术的发展，目前数据库系统对于海量数据的存储和高效访问海量数据要求越来越高，MongoDB分片机制就是为了解决海量数据的存储和高效海量数</description>
-    </item>
-    
-    <item>
-      <title>Spark核心算子</title>
-      <link>https://chavinking.github.io/post/java/Spark%E6%A0%B8%E5%BF%83%E7%AE%97%E5%AD%90/</link>
-      <pubDate>Tue, 11 Aug 2020 01:37:56 +0800</pubDate>
-      
-      <guid>https://chavinking.github.io/post/java/Spark%E6%A0%B8%E5%BF%83%E7%AE%97%E5%AD%90/</guid>
-      <description>Spark RDD： Transformation Meaning map(func) 返回一个新的分布式数据集，该数据集是通过将源的每个元素传递给函数func处理形成的。 filter(func) 返回一个新的数据集，该数据集是通过fu</description>
-    </item>
-    
-    <item>
-      <title>SQL优化</title>
-      <link>https://chavinking.github.io/post/sql/SQL%E4%BC%98%E5%8C%96/</link>
-      <pubDate>Tue, 11 Aug 2020 01:37:56 +0800</pubDate>
-      
-      <guid>https://chavinking.github.io/post/sql/SQL%E4%BC%98%E5%8C%96/</guid>
-      <description>逻辑优化 SQL改写规则</description>
-    </item>
-    
-    <item>
-      <title>Superset安装部署</title>
-      <link>https://chavinking.github.io/post/dw/supserset%E5%AE%89%E8%A3%85%E9%83%A8%E7%BD%B2/</link>
-      <pubDate>Tue, 11 Aug 2020 01:37:56 +0800</pubDate>
-      
-      <guid>https://chavinking.github.io/post/dw/supserset%E5%AE%89%E8%A3%85%E9%83%A8%E7%BD%B2/</guid>
-      <description>1、安装python环境 superset运行要求python3.6环境 1）安装miniconda 下载地址：https://repo.anac</description>
-    </item>
-    
-    <item>
       <title>两个左连接SQL执行计划解析（Oracle和PGSQL对比）</title>
       <link>https://chavinking.github.io/post/sql/%E4%B8%A4%E4%B8%AA%E5%B7%A6%E8%BF%9E%E6%8E%A5SQL%E6%89%A7%E8%A1%8C%E8%AE%A1%E5%88%92%E8%A7%A3%E6%9E%90Oracle%E5%92%8CPGSQL%E5%AF%B9%E6%AF%94/</link>
       <pubDate>Tue, 11 Aug 2020 01:37:56 +0800</pubDate>
       
       <guid>https://chavinking.github.io/post/sql/%E4%B8%A4%E4%B8%AA%E5%B7%A6%E8%BF%9E%E6%8E%A5SQL%E6%89%A7%E8%A1%8C%E8%AE%A1%E5%88%92%E8%A7%A3%E6%9E%90Oracle%E5%92%8CPGSQL%E5%AF%B9%E6%AF%94/</guid>
-      <description>上一篇解析链接如下： https://www.cnblogs.com/wcwen1990/p/9325968.html 1、SQL示例1： SQL&amp;gt; select * from ( select * from tmp1 where c &amp;gt;= 1 ) t1 left join ( select * from tmp2 where b &amp;lt; 30 ) t2 on t1.a = t2.a and t2.d &amp;gt; 1 and t1.e &amp;gt;= 2 where t1.b &amp;lt; 50 ; A B C E A</description>
+      <description>1、SQL示例1： 1 2 3 4 5 6 7 8 9 select * from ( select * from tmp1 where c &amp;gt;= 1 ) t1 left join ( select * from tmp2 where b &amp;lt; 30 ) t2 on t1.a = t2.a and t2.d &amp;gt; 1 and t1.e &amp;gt;= 2 where t1.b &amp;lt; 50 ; ​ Oracle执</description>
     </item>
     
     <item>
@@ -62,7 +26,7 @@
       <pubDate>Tue, 11 Aug 2020 01:37:56 +0800</pubDate>
       
       <guid>https://chavinking.github.io/post/dw/%E5%A2%9E%E9%87%8FETL-%E9%95%BF%E5%91%A8%E6%9C%9F%E6%8C%87%E6%A0%87-%E4%BC%98%E5%8C%96%E6%96%B9%E6%A1%88/</guid>
-      <description>​ 在日常数据处理过程中避免不了要计算跨长周期数据指标统计需求，类似于如下： ​ 1、 统计每个城市(过去30天)用户浏览次数； ​ 统计每个城市(本年</description>
+      <description>​ 在日常数据处理过程中避免不了要计算跨长周期数据指标统计需求，常见三种场景抽象如下： pv类： 统计每个城市(过去30天)用户浏览次数； 统计每个</description>
     </item>
     
   </channel>

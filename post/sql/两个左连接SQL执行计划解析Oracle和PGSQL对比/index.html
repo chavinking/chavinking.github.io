@@ -16,7 +16,7 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
 
 
-<meta name="author" content="ChavinKing" /><meta name="description" content="上一篇解析链接如下： https://www.cnblogs.com/wcwen1990/p/9325968.html 1、SQL示例1： SQL&amp;gt; select * from ( select * from tmp1 where c &amp;gt;= 1 ) t1 left join ( select * from tmp2 where b &amp;lt; 30 ) t2 on t1.a = t2.a and t2.d &amp;gt; 1 and t1.e &amp;gt;= 2 where t1.b &amp;lt; 50 ; A B C E A" /><meta name="keywords" content="data warehouse, Github, flink, java, spark, ETL" />
+<meta name="author" content="ChavinKing" /><meta name="description" content="1、SQL示例1： 1 2 3 4 5 6 7 8 9 select * from ( select * from tmp1 where c &amp;gt;= 1 ) t1 left join ( select * from tmp2 where b &amp;lt; 30 ) t2 on t1.a = t2.a and t2.d &amp;gt; 1 and t1.e &amp;gt;= 2 where t1.b &amp;lt; 50 ; ​ Oracle执" /><meta name="keywords" content="data warehouse, Github, flink, java, spark, ETL" />
 
 
 
@@ -41,22 +41,22 @@
 
 
 <meta property="og:title" content="两个左连接SQL执行计划解析（Oracle和PGSQL对比）" />
-<meta property="og:description" content="上一篇解析链接如下： https://www.cnblogs.com/wcwen1990/p/9325968.html 1、SQL示例1： SQL&gt; select * from ( select * from tmp1 where c &gt;= 1 ) t1 left join ( select * from tmp2 where b &lt; 30 ) t2 on t1.a = t2.a and t2.d &gt; 1 and t1.e &gt;= 2 where t1.b &lt; 50 ; A B C E A" />
+<meta property="og:description" content="1、SQL示例1： 1 2 3 4 5 6 7 8 9 select * from ( select * from tmp1 where c &gt;= 1 ) t1 left join ( select * from tmp2 where b &lt; 30 ) t2 on t1.a = t2.a and t2.d &gt; 1 and t1.e &gt;= 2 where t1.b &lt; 50 ; ​ Oracle执" />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://chavinking.github.io/post/sql/%E4%B8%A4%E4%B8%AA%E5%B7%A6%E8%BF%9E%E6%8E%A5SQL%E6%89%A7%E8%A1%8C%E8%AE%A1%E5%88%92%E8%A7%A3%E6%9E%90Oracle%E5%92%8CPGSQL%E5%AF%B9%E6%AF%94/" />
 <meta property="article:published_time" content="2020-08-11T01:37:56+08:00" />
 <meta property="article:modified_time" content="2020-08-11T01:37:56+08:00" />
 <meta itemprop="name" content="两个左连接SQL执行计划解析（Oracle和PGSQL对比）">
-<meta itemprop="description" content="上一篇解析链接如下： https://www.cnblogs.com/wcwen1990/p/9325968.html 1、SQL示例1： SQL&gt; select * from ( select * from tmp1 where c &gt;= 1 ) t1 left join ( select * from tmp2 where b &lt; 30 ) t2 on t1.a = t2.a and t2.d &gt; 1 and t1.e &gt;= 2 where t1.b &lt; 50 ; A B C E A">
+<meta itemprop="description" content="1、SQL示例1： 1 2 3 4 5 6 7 8 9 select * from ( select * from tmp1 where c &gt;= 1 ) t1 left join ( select * from tmp2 where b &lt; 30 ) t2 on t1.a = t2.a and t2.d &gt; 1 and t1.e &gt;= 2 where t1.b &lt; 50 ; ​ Oracle执">
 <meta itemprop="datePublished" content="2020-08-11T01:37:56&#43;08:00" />
 <meta itemprop="dateModified" content="2020-08-11T01:37:56&#43;08:00" />
-<meta itemprop="wordCount" content="2026">
+<meta itemprop="wordCount" content="2270">
 
 
 
 <meta itemprop="keywords" content="SQL,优化," /><meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="两个左连接SQL执行计划解析（Oracle和PGSQL对比）"/>
-<meta name="twitter:description" content="上一篇解析链接如下： https://www.cnblogs.com/wcwen1990/p/9325968.html 1、SQL示例1： SQL&gt; select * from ( select * from tmp1 where c &gt;= 1 ) t1 left join ( select * from tmp2 where b &lt; 30 ) t2 on t1.a = t2.a and t2.d &gt; 1 and t1.e &gt;= 2 where t1.b &lt; 50 ; A B C E A"/>
+<meta name="twitter:description" content="1、SQL示例1： 1 2 3 4 5 6 7 8 9 select * from ( select * from tmp1 where c &gt;= 1 ) t1 left join ( select * from tmp2 where b &lt; 30 ) t2 on t1.a = t2.a and t2.d &gt; 1 and t1.e &gt;= 2 where t1.b &lt; 50 ; ​ Oracle执"/>
 
 <!--[if lte IE 9]>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
@@ -126,11 +126,11 @@
       <h1 class="post-title">两个左连接SQL执行计划解析（Oracle和PGSQL对比）</h1>
 
       <div class="post-meta">
-        <span class="post-time"> 11110-08-08 01:01:01 </span>
+        <span class="post-time"> 2020-08-11 01:37 </span>
         <div class="post-category">
             <a href="/categories/SQL/"> SQL </a>
             </div>
-          <span class="more-meta"> 约 2026 字 </span>
+          <span class="more-meta"> 约 2270 字 </span>
           <span class="more-meta"> 预计阅读 5 分钟 </span>
         <span id="busuanzi_container_page_pv" class="more-meta"> <span id="busuanzi_value_page_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> 次阅读 </span>
       </div>
@@ -139,215 +139,458 @@
     <div class="post-toc" id="post-toc">
   <h2 class="post-toc-title">文章目录</h2>
   <div class="post-toc-content">
-    <nav id="TableOfContents">
-  <ul>
-    <li><a href="#execution-plan">Execution Plan</a></li>
-    <li><a href="#-id---operation----name--rows---bytes--cost-cpu-time--">| Id  | Operation	   | Name | Rows  | Bytes | Cost (%CPU)| Time	  |</a></li>
-    <li><a href="#--3----table-access-full-tmp2-1-----52-3---0-000001-">|   0 | SELECT STATEMENT   |	  |	4 |   416 |	7  (15)| 00:00:01 |
-|*  1 |  HASH JOIN OUTER   |	  |	4 |   416 |	7  (15)| 00:00:01 |
-|*  2 |   TABLE ACCESS FULL| TMP1 |	4 |   208 |	3   (0)| 00:00:01 |
-|*  3 |   TABLE ACCESS FULL| TMP2 |	1 |    52 |	3   (0)| 00:00:01 |</a></li>
-    <li><a href="#predicate-information-identified-by-operation-id">Predicate Information (identified by operation id):</a></li>
-    <li><a href="#note">Note</a></li>
-    <li><a href="#statistics">Statistics</a></li>
-    <li><a href="#query-plan">postgres=# explain analyze select * 
-postgres-# from (
-postgres(# select * from tmp1 where c &gt;= 1
-postgres(# ) t1 left join (
-postgres(# select * from tmp2 where b &lt; 30
-postgres(# ) t2 on t1.a = t2.a 
-postgres-# and t2.d &gt; 1 and t1.e &gt;= 2 
-postgres-# where t1.b &lt; 50 
-postgres-# ;
-QUERY PLAN</a></li>
-    <li><a href="#execution-plan-1">Execution Plan</a></li>
-    <li><a href="#-id---operation----name--rows---bytes--cost-cpu-time---1">| Id  | Operation	   | Name | Rows  | Bytes | Cost (%CPU)| Time	  |</a></li>
-    <li><a href="#--3----table-access-full-tmp1-3----156-3---0-000001-">|   0 | SELECT STATEMENT   |	  |	1 |   104 |	7  (15)| 00:00:01 |
-|*  1 |  HASH JOIN	   |	  |	1 |   104 |	7  (15)| 00:00:01 |
-|*  2 |   TABLE ACCESS FULL| TMP2 |	1 |    52 |	3   (0)| 00:00:01 |
-|*  3 |   TABLE ACCESS FULL| TMP1 |	3 |   156 |	3   (0)| 00:00:01 |</a></li>
-    <li><a href="#predicate-information-identified-by-operation-id-1">Predicate Information (identified by operation id):</a></li>
-    <li><a href="#note-1">Note</a></li>
-    <li><a href="#statistics-1">Statistics</a></li>
-    <li><a href="#query-plan-1">postgres=# explain analyze select * 
-postgres-# from (
-postgres(# select * from tmp1 where c &gt;= 1
-postgres(# ) t1 left join (
-postgres(# select * from tmp2 where b &lt; 30
-postgres(# ) t2 on t1.a = t2.a 
-postgres-# and t2.d &gt; 1 and t1.e &gt;= 2 
-postgres-# where t1.b &lt; 50 and t2.e &lt;= 3 
-postgres-# ;
-QUERY PLAN</a></li>
-  </ul>
-</nav>
+    <nav id="TableOfContents"></nav>
   </div>
 </div>
     <div class="post-content">
-      <p>上一篇解析链接如下：
-<a href="https://www.cnblogs.com/wcwen1990/p/9325968.html">https://www.cnblogs.com/wcwen1990/p/9325968.html</a></p>
+      <hr>
 <p>1、SQL示例1：</p>
-<p>SQL&gt; select * 
-from (
-select * from tmp1 where c &gt;= 1
-) t1 left join (
-select * from tmp2 where b &lt; 30
-) t2 on t1.a = t2.a 
-and t2.d &gt; 1 and t1.e &gt;= 2 
-where t1.b &lt; 50 
-;</p>
-<pre><code> A	    B	       C	  E	     A		B	   D	      E
-</code></pre>
-<hr>
-<pre><code> 2	   20	       2	  2	     2	       20	   2	      2
- 4	   40	       4	  4
- 3	   30	       3	  3
- 1	   10	       1	  1
-</code></pre>
-<h2 id="execution-plan">Execution Plan</h2>
-<p>Plan hash value: 2592321047</p>
-<hr>
-<h2 id="-id---operation----name--rows---bytes--cost-cpu-time--">| Id  | Operation	   | Name | Rows  | Bytes | Cost (%CPU)| Time	  |</h2>
-<h2 id="--3----table-access-full-tmp2-1-----52-3---0-000001-">|   0 | SELECT STATEMENT   |	  |	4 |   416 |	7  (15)| 00:00:01 |
-|*  1 |  HASH JOIN OUTER   |	  |	4 |   416 |	7  (15)| 00:00:01 |
-|*  2 |   TABLE ACCESS FULL| TMP1 |	4 |   208 |	3   (0)| 00:00:01 |
-|*  3 |   TABLE ACCESS FULL| TMP2 |	1 |    52 |	3   (0)| 00:00:01 |</h2>
-<h2 id="predicate-information-identified-by-operation-id">Predicate Information (identified by operation id):</h2>
-<p>1 - access(&ldquo;TMP1&rdquo;.&ldquo;A&quot;=&quot;TMP2&rdquo;.&ldquo;A&rdquo;(+))
-filter(&ldquo;TMP1&rdquo;.&ldquo;E&quot;&gt;=CASE	WHEN (&ldquo;TMP2&rdquo;.&ldquo;A&rdquo;(+) IS NOT NULL) THEN 2
-ELSE 2 END )
-2 - filter(&ldquo;TMP1&rdquo;.&ldquo;B&quot;&lt;50 AND &ldquo;C&quot;&gt;=1)
-3 - filter(&ldquo;TMP2&rdquo;.&ldquo;D&rdquo;(+)&gt;1 AND &ldquo;B&rdquo;(+)&lt;30)</p>
-<h2 id="note">Note</h2>
-<ul>
-<li>dynamic sampling used for this statement (level=2)</li>
-</ul>
-<h2 id="statistics">Statistics</h2>
-<pre><code>  0  recursive calls
-  0  db block gets
-  7  consistent gets
-  0  physical reads
-  0  redo size
-   1082  bytes sent via SQL*Net to client
-524  bytes received via SQL*Net from client
-  2  SQL*Net roundtrips to/from client
-  0  sorts (memory)
-  0  sorts (disk)
-  4  rows processed
-</code></pre>
-<h2 id="query-plan">postgres=# explain analyze select * 
-postgres-# from (
-postgres(# select * from tmp1 where c &gt;= 1
-postgres(# ) t1 left join (
-postgres(# select * from tmp2 where b &lt; 30
-postgres(# ) t2 on t1.a = t2.a 
-postgres-# and t2.d &gt; 1 and t1.e &gt;= 2 
-postgres-# where t1.b &lt; 50 
-postgres-# ;
-QUERY PLAN</h2>
-<p>Hash Left Join  (cost=34.90..80.00 rows=181 width=32) (actual time=0.021..0.035 rows=4 loops=1)
-Hash Cond: (&ldquo;outer&rdquo;.a = &ldquo;inner&rdquo;.a)
-Join Filter: (&ldquo;outer&rdquo;.e &gt;= 2)
--&gt;  Seq Scan on tmp1  (cost=0.00..34.45 rows=181 width=16) (actual time=0.006..0.011 rows=4 loops=1)
-Filter: ((c &gt;= 1) AND (b &lt; 50))
--&gt;  Hash  (cost=34.45..34.45 rows=181 width=16) (actual time=0.007..0.007 rows=1 loops=1)
--&gt;  Seq Scan on tmp2  (cost=0.00..34.45 rows=181 width=16) (actual time=0.002..0.003 rows=1 loops=1)
-Filter: ((b &lt; 30) AND (d &gt; 1))
-Total runtime: 0.063 ms
-(9 rows)</p>
-<p>SQL执行计划的分析：</p>
-<ol>
-<li>全表扫描左表TMP1，同时根据TMP1表子查询条件&quot;C&quot;&gt;=1和where过滤条件&quot;T1&rdquo;.&ldquo;B&quot;&lt;50联合过滤，即filter(&ldquo;TMP1&rdquo;.&ldquo;B&quot;&lt;50 AND &ldquo;C&quot;&gt;=1)，计算结果临时表记为tmp1；</li>
-<li>全表扫描右表TMP2，同时根据TMP2表子查询条件&quot;B&rdquo;(+)&lt;30和on子句&quot;T2&rdquo;.&ldquo;D&rdquo;(+)&gt;1联合过滤，即filter(&ldquo;TMP2&rdquo;.&ldquo;D&rdquo;(+)&gt;1 AND &ldquo;B&rdquo;(+)&lt;30)，计算结果临时表记为tmp2；</li>
-<li>左表TMP1及右表TMP2处理后临时表tmp1和tmp2通过access(&ldquo;TMP1&rdquo;.&ldquo;A&quot;=&quot;TMP2&rdquo;.&ldquo;A&rdquo;(+))连接条件进行Hash Left Join操作，左临时表结果集全量返回，右表不匹配行置为null，返回结果临时表记为tmp3；</li>
-<li>返回结果集。</li>
-</ol>
-<p>2、SQL示例2：</p>
-<p>SQL&gt; select * 
-from (
-select * from tmp1 where c &gt;= 1
-) t1 left join (
-select * from tmp2 where b &lt; 30
-) t2 on t1.a = t2.a 
-and t2.d &gt; 1 and t1.e &gt;= 2 
-where t1.b &lt; 50 and t2.e &lt;= 3 
-;</p>
-<pre><code> A	    B	       C	  E	     A		B	   D	      E
-</code></pre>
-<hr>
-<pre><code> 2	   20	       2	  2	     2	       20	   2	      2
-</code></pre>
-<h2 id="execution-plan-1">Execution Plan</h2>
-<p>Plan hash value: 1630095649</p>
-<hr>
-<h2 id="-id---operation----name--rows---bytes--cost-cpu-time---1">| Id  | Operation	   | Name | Rows  | Bytes | Cost (%CPU)| Time	  |</h2>
-<h2 id="--3----table-access-full-tmp1-3----156-3---0-000001-">|   0 | SELECT STATEMENT   |	  |	1 |   104 |	7  (15)| 00:00:01 |
-|*  1 |  HASH JOIN	   |	  |	1 |   104 |	7  (15)| 00:00:01 |
-|*  2 |   TABLE ACCESS FULL| TMP2 |	1 |    52 |	3   (0)| 00:00:01 |
-|*  3 |   TABLE ACCESS FULL| TMP1 |	3 |   156 |	3   (0)| 00:00:01 |</h2>
-<h2 id="predicate-information-identified-by-operation-id-1">Predicate Information (identified by operation id):</h2>
-<p>1 - access(&ldquo;TMP1&rdquo;.&ldquo;A&quot;=&quot;TMP2&rdquo;.&ldquo;A&rdquo;)
-2 - filter(&ldquo;TMP2&rdquo;.&ldquo;E&quot;&lt;=3 AND &ldquo;TMP2&rdquo;.&ldquo;D&quot;&gt;1 AND &ldquo;B&quot;&lt;30)
-3 - filter(&ldquo;TMP1&rdquo;.&ldquo;B&quot;&lt;50 AND &ldquo;TMP1&rdquo;.&ldquo;E&quot;&gt;=2 AND &ldquo;C&quot;&gt;=1)</p>
-<h2 id="note-1">Note</h2>
-<ul>
-<li>dynamic sampling used for this statement (level=2)</li>
-</ul>
-<h2 id="statistics-1">Statistics</h2>
-<pre><code>  9  recursive calls
-  0  db block gets
- 15  consistent gets
-  0  physical reads
-  0  redo size
-981  bytes sent via SQL*Net to client
-524  bytes received via SQL*Net from client
-  2  SQL*Net roundtrips to/from client
-  0  sorts (memory)
-  0  sorts (disk)
-  1  rows processed
-</code></pre>
-<p>SQL&gt;</p>
-<p>postgres=# select * 
-postgres-# from (
-postgres(# select * from tmp1 where c &gt;= 1
-postgres(# ) t1 left join (
-postgres(# select * from tmp2 where b &lt; 30
-postgres(# ) t2 on t1.a = t2.a 
-postgres-# and t2.d &gt; 1 and t1.e &gt;= 2 
-postgres-# where t1.b &lt; 50 and t2.e &lt;= 3 
-postgres-# ;
-a | b  | c | e | a | b  | d | e 
-&mdash;+&mdash;-+&mdash;+&mdash;+&mdash;+&mdash;-+&mdash;+&mdash;
-2 | 20 | 2 | 2 | 2 | 20 | 2 | 2
-(1 row)</p>
-<h2 id="query-plan-1">postgres=# explain analyze select * 
-postgres-# from (
-postgres(# select * from tmp1 where c &gt;= 1
-postgres(# ) t1 left join (
-postgres(# select * from tmp2 where b &lt; 30
-postgres(# ) t2 on t1.a = t2.a 
-postgres-# and t2.d &gt; 1 and t1.e &gt;= 2 
-postgres-# where t1.b &lt; 50 and t2.e &lt;= 3 
-postgres-# ;
-QUERY PLAN</h2>
-<p>Hash Join  (cost=38.68..78.43 rows=18 width=32) (actual time=0.033..0.041 rows=1 loops=1)
-Hash Cond: (&ldquo;outer&rdquo;.a = &ldquo;inner&rdquo;.a)
--&gt;  Seq Scan on tmp1  (cost=0.00..38.53 rows=60 width=16) (actual time=0.007..0.011 rows=3 loops=1)
-Filter: ((c &gt;= 1) AND (e &gt;= 2) AND (b &lt; 50))
--&gt;  Hash  (cost=38.53..38.53 rows=60 width=16) (actual time=0.008..0.008 rows=1 loops=1)
--&gt;  Seq Scan on tmp2  (cost=0.00..38.53 rows=60 width=16) (actual time=0.003..0.005 rows=1 loops=1)
-Filter: ((b &lt; 30) AND (d &gt; 1) AND (e &lt;= 3))
-Total runtime: 0.070 ms
-(8 rows)</p>
-<p>postgres=#</p>
-<p>SQL执行计划的分析：</p>
-<ol>
-<li>全表扫描左表TMP2，同时根据TMP2表子查询条件&quot;B&quot;&lt;30和where过滤条件&quot;TMP2&rdquo;.&ldquo;E&quot;&lt;=3及ON子句过滤条件&quot;TMP2&rdquo;.&ldquo;D&quot;&gt;1联合过滤，即filter(&ldquo;TMP2&rdquo;.&ldquo;E&quot;&lt;=3 AND &ldquo;TMP2&rdquo;.&ldquo;D&quot;&gt;1 AND &ldquo;B&quot;&lt;30)，计算结果临时表记为tmp1；</li>
-<li>全表扫描右表TMP1，同时根据TMP1表子查询条件&quot;C&quot;&gt;=1和where子句过滤条件&quot;TMP1&rdquo;.&ldquo;B&quot;&lt;50及ON子句&quot;TMP1&rdquo;.&ldquo;E&quot;&gt;=2联合过滤，即filter(&ldquo;TMP1&rdquo;.&ldquo;B&quot;&lt;50 AND &ldquo;TMP1&rdquo;.&ldquo;E&quot;&gt;=2 AND &ldquo;C&quot;&gt;=1)，计算结果临时表记为tmp2；</li>
-<li>临时表tmp1和tmp2通过access(&ldquo;TMP1&rdquo;.&ldquo;A&quot;=&quot;TMP2&rdquo;.&ldquo;A&rdquo;)连接条件进行Hash Join连接操作（此处left join写法已经被转换为内链接），返回匹配结果临时表记为tmp3；</li>
-<li>返回结果集。</li>
-</ol>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span><span class="lnt">9
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-sql" data-lang="sql"><span class="k">select</span> <span class="o">*</span> 
+<span class="k">from</span> <span class="p">(</span>
+<span class="k">select</span> <span class="o">*</span> <span class="k">from</span> <span class="n">tmp1</span> <span class="k">where</span> <span class="k">c</span> <span class="o">&gt;=</span> <span class="mi">1</span>
+<span class="p">)</span> <span class="n">t1</span> <span class="k">left</span> <span class="k">join</span> <span class="p">(</span>
+<span class="k">select</span> <span class="o">*</span> <span class="k">from</span> <span class="n">tmp2</span> <span class="k">where</span> <span class="n">b</span> <span class="o">&lt;</span> <span class="mi">30</span>
+<span class="p">)</span> <span class="n">t2</span> <span class="k">on</span> <span class="n">t1</span><span class="p">.</span><span class="n">a</span> <span class="o">=</span> <span class="n">t2</span><span class="p">.</span><span class="n">a</span> 
+<span class="k">and</span> <span class="n">t2</span><span class="p">.</span><span class="n">d</span> <span class="o">&gt;</span> <span class="mi">1</span> <span class="k">and</span> <span class="n">t1</span><span class="p">.</span><span class="n">e</span> <span class="o">&gt;=</span> <span class="mi">2</span> 
+<span class="k">where</span> <span class="n">t1</span><span class="p">.</span><span class="n">b</span> <span class="o">&lt;</span> <span class="mi">50</span> 
+<span class="p">;</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>​	Oracle执行结果：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span><span class="lnt">39
+</span><span class="lnt">40
+</span><span class="lnt">41
+</span><span class="lnt">42
+</span><span class="lnt">43
+</span><span class="lnt">44
+</span><span class="lnt">45
+</span><span class="lnt">46
+</span><span class="lnt">47
+</span><span class="lnt">48
+</span><span class="lnt">49
+</span><span class="lnt">50
+</span><span class="lnt">51
+</span><span class="lnt">52
+</span><span class="lnt">53
+</span><span class="lnt">54
+</span><span class="lnt">55
+</span><span class="lnt">56
+</span><span class="lnt">57
+</span><span class="lnt">58
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-sql" data-lang="sql"><span class="k">SQL</span><span class="o">&gt;</span> <span class="k">select</span> <span class="o">*</span> 
+<span class="k">from</span> <span class="p">(</span>
+<span class="k">select</span> <span class="o">*</span> <span class="k">from</span> <span class="n">tmp1</span> <span class="k">where</span> <span class="k">c</span> <span class="o">&gt;=</span> <span class="mi">1</span>
+<span class="p">)</span> <span class="n">t1</span> <span class="k">left</span> <span class="k">join</span> <span class="p">(</span>
+<span class="k">select</span> <span class="o">*</span> <span class="k">from</span> <span class="n">tmp2</span> <span class="k">where</span> <span class="n">b</span> <span class="o">&lt;</span> <span class="mi">30</span>
+<span class="p">)</span> <span class="n">t2</span> <span class="k">on</span> <span class="n">t1</span><span class="p">.</span><span class="n">a</span> <span class="o">=</span> <span class="n">t2</span><span class="p">.</span><span class="n">a</span> 
+<span class="k">and</span> <span class="n">t2</span><span class="p">.</span><span class="n">d</span> <span class="o">&gt;</span> <span class="mi">1</span> <span class="k">and</span> <span class="n">t1</span><span class="p">.</span><span class="n">e</span> <span class="o">&gt;=</span> <span class="mi">2</span> 
+<span class="k">where</span> <span class="n">t1</span><span class="p">.</span><span class="n">b</span> <span class="o">&lt;</span> <span class="mi">50</span> 
+<span class="p">;</span>
 
+	 <span class="n">A</span>	    <span class="n">B</span>	       <span class="k">C</span>	  <span class="n">E</span>	     <span class="n">A</span>		<span class="n">B</span>	   <span class="n">D</span>	      <span class="n">E</span>
+<span class="c1">---------- ---------- ---------- ---------- ---------- ---------- ---------- ----------
+</span><span class="c1"></span>	 <span class="mi">2</span>	   <span class="mi">20</span>	       <span class="mi">2</span>	  <span class="mi">2</span>	     <span class="mi">2</span>	       <span class="mi">20</span>	   <span class="mi">2</span>	      <span class="mi">2</span>
+	 <span class="mi">4</span>	   <span class="mi">40</span>	       <span class="mi">4</span>	  <span class="mi">4</span>
+	 <span class="mi">3</span>	   <span class="mi">30</span>	       <span class="mi">3</span>	  <span class="mi">3</span>
+	 <span class="mi">1</span>	   <span class="mi">10</span>	       <span class="mi">1</span>	  <span class="mi">1</span>
+
+
+<span class="n">Execution</span> <span class="n">Plan</span>
+<span class="c1">----------------------------------------------------------
+</span><span class="c1"></span><span class="n">Plan</span> <span class="n">hash</span> <span class="n">value</span><span class="p">:</span> <span class="mi">2592321047</span>
+
+<span class="c1">---------------------------------------------------------------------------
+</span><span class="c1"></span><span class="o">|</span> <span class="n">Id</span>  <span class="o">|</span> <span class="k">Operation</span>	   <span class="o">|</span> <span class="n">Name</span> <span class="o">|</span> <span class="k">Rows</span>  <span class="o">|</span> <span class="n">Bytes</span> <span class="o">|</span> <span class="n">Cost</span> <span class="p">(</span><span class="o">%</span><span class="n">CPU</span><span class="p">)</span><span class="o">|</span> <span class="n">Time</span>	  <span class="o">|</span>
+<span class="c1">---------------------------------------------------------------------------
+</span><span class="c1"></span><span class="o">|</span>   <span class="mi">0</span> <span class="o">|</span> <span class="k">SELECT</span> <span class="k">STATEMENT</span>   <span class="o">|</span>	  <span class="o">|</span>	<span class="mi">4</span> <span class="o">|</span>   <span class="mi">416</span> <span class="o">|</span>	<span class="mi">7</span>  <span class="p">(</span><span class="mi">15</span><span class="p">)</span><span class="o">|</span> <span class="mi">00</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="mi">01</span> <span class="o">|</span>
+<span class="o">|*</span>  <span class="mi">1</span> <span class="o">|</span>  <span class="n">HASH</span> <span class="k">JOIN</span> <span class="k">OUTER</span>   <span class="o">|</span>	  <span class="o">|</span>	<span class="mi">4</span> <span class="o">|</span>   <span class="mi">416</span> <span class="o">|</span>	<span class="mi">7</span>  <span class="p">(</span><span class="mi">15</span><span class="p">)</span><span class="o">|</span> <span class="mi">00</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="mi">01</span> <span class="o">|</span>
+<span class="o">|*</span>  <span class="mi">2</span> <span class="o">|</span>   <span class="k">TABLE</span> <span class="k">ACCESS</span> <span class="k">FULL</span><span class="o">|</span> <span class="n">TMP1</span> <span class="o">|</span>	<span class="mi">4</span> <span class="o">|</span>   <span class="mi">208</span> <span class="o">|</span>	<span class="mi">3</span>   <span class="p">(</span><span class="mi">0</span><span class="p">)</span><span class="o">|</span> <span class="mi">00</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="mi">01</span> <span class="o">|</span>
+<span class="o">|*</span>  <span class="mi">3</span> <span class="o">|</span>   <span class="k">TABLE</span> <span class="k">ACCESS</span> <span class="k">FULL</span><span class="o">|</span> <span class="n">TMP2</span> <span class="o">|</span>	<span class="mi">1</span> <span class="o">|</span>    <span class="mi">52</span> <span class="o">|</span>	<span class="mi">3</span>   <span class="p">(</span><span class="mi">0</span><span class="p">)</span><span class="o">|</span> <span class="mi">00</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="mi">01</span> <span class="o">|</span>
+<span class="c1">---------------------------------------------------------------------------
+</span><span class="c1"></span>
+<span class="n">Predicate</span> <span class="n">Information</span> <span class="p">(</span><span class="n">identified</span> <span class="k">by</span> <span class="k">operation</span> <span class="n">id</span><span class="p">):</span>
+<span class="c1">---------------------------------------------------
+</span><span class="c1"></span>
+   <span class="mi">1</span> <span class="o">-</span> <span class="k">access</span><span class="p">(</span><span class="s2">&#34;TMP1&#34;</span><span class="p">.</span><span class="s2">&#34;A&#34;</span><span class="o">=</span><span class="s2">&#34;TMP2&#34;</span><span class="p">.</span><span class="s2">&#34;A&#34;</span><span class="p">(</span><span class="o">+</span><span class="p">))</span>
+       <span class="n">filter</span><span class="p">(</span><span class="s2">&#34;TMP1&#34;</span><span class="p">.</span><span class="s2">&#34;E&#34;</span><span class="o">&gt;=</span><span class="k">CASE</span>	<span class="k">WHEN</span> <span class="p">(</span><span class="s2">&#34;TMP2&#34;</span><span class="p">.</span><span class="s2">&#34;A&#34;</span><span class="p">(</span><span class="o">+</span><span class="p">)</span> <span class="k">IS</span> <span class="k">NOT</span> <span class="k">NULL</span><span class="p">)</span> <span class="k">THEN</span> <span class="mi">2</span>
+	      <span class="k">ELSE</span> <span class="mi">2</span> <span class="k">END</span> <span class="p">)</span>
+   <span class="mi">2</span> <span class="o">-</span> <span class="n">filter</span><span class="p">(</span><span class="s2">&#34;TMP1&#34;</span><span class="p">.</span><span class="s2">&#34;B&#34;</span><span class="o">&lt;</span><span class="mi">50</span> <span class="k">AND</span> <span class="s2">&#34;C&#34;</span><span class="o">&gt;=</span><span class="mi">1</span><span class="p">)</span>
+   <span class="mi">3</span> <span class="o">-</span> <span class="n">filter</span><span class="p">(</span><span class="s2">&#34;TMP2&#34;</span><span class="p">.</span><span class="s2">&#34;D&#34;</span><span class="p">(</span><span class="o">+</span><span class="p">)</span><span class="o">&gt;</span><span class="mi">1</span> <span class="k">AND</span> <span class="s2">&#34;B&#34;</span><span class="p">(</span><span class="o">+</span><span class="p">)</span><span class="o">&lt;</span><span class="mi">30</span><span class="p">)</span>
+
+<span class="n">Note</span>
+<span class="c1">-----
+</span><span class="c1"></span>   <span class="o">-</span> <span class="k">dynamic</span> <span class="n">sampling</span> <span class="n">used</span> <span class="k">for</span> <span class="n">this</span> <span class="k">statement</span> <span class="p">(</span><span class="k">level</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+
+
+<span class="k">Statistics</span>
+<span class="c1">----------------------------------------------------------
+</span><span class="c1"></span>	  <span class="mi">0</span>  <span class="k">recursive</span> <span class="n">calls</span>
+	  <span class="mi">0</span>  <span class="n">db</span> <span class="n">block</span> <span class="n">gets</span>
+	  <span class="mi">7</span>  <span class="n">consistent</span> <span class="n">gets</span>
+	  <span class="mi">0</span>  <span class="n">physical</span> <span class="k">reads</span>
+	  <span class="mi">0</span>  <span class="n">redo</span> <span class="k">size</span>
+       <span class="mi">1082</span>  <span class="n">bytes</span> <span class="n">sent</span> <span class="n">via</span> <span class="k">SQL</span><span class="o">*</span><span class="n">Net</span> <span class="k">to</span> <span class="n">client</span>
+	<span class="mi">524</span>  <span class="n">bytes</span> <span class="n">received</span> <span class="n">via</span> <span class="k">SQL</span><span class="o">*</span><span class="n">Net</span> <span class="k">from</span> <span class="n">client</span>
+	  <span class="mi">2</span>  <span class="k">SQL</span><span class="o">*</span><span class="n">Net</span> <span class="n">roundtrips</span> <span class="k">to</span><span class="o">/</span><span class="k">from</span> <span class="n">client</span>
+	  <span class="mi">0</span>  <span class="n">sorts</span> <span class="p">(</span><span class="n">memory</span><span class="p">)</span>
+	  <span class="mi">0</span>  <span class="n">sorts</span> <span class="p">(</span><span class="n">disk</span><span class="p">)</span>
+	  <span class="mi">4</span>  <span class="k">rows</span> <span class="n">processed</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>​	PostgreSQL示例：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-sql" data-lang="sql"><span class="n">postgres</span><span class="o">=#</span> <span class="k">explain</span> <span class="k">analyze</span> <span class="k">select</span> <span class="o">*</span> 
+<span class="n">postgres</span><span class="o">-#</span> <span class="k">from</span> <span class="p">(</span>
+<span class="n">postgres</span><span class="p">(</span><span class="o">#</span> <span class="k">select</span> <span class="o">*</span> <span class="k">from</span> <span class="n">tmp1</span> <span class="k">where</span> <span class="k">c</span> <span class="o">&gt;=</span> <span class="mi">1</span>
+<span class="n">postgres</span><span class="p">(</span><span class="o">#</span> <span class="p">)</span> <span class="n">t1</span> <span class="k">left</span> <span class="k">join</span> <span class="p">(</span>
+<span class="n">postgres</span><span class="p">(</span><span class="o">#</span> <span class="k">select</span> <span class="o">*</span> <span class="k">from</span> <span class="n">tmp2</span> <span class="k">where</span> <span class="n">b</span> <span class="o">&lt;</span> <span class="mi">30</span>
+<span class="n">postgres</span><span class="p">(</span><span class="o">#</span> <span class="p">)</span> <span class="n">t2</span> <span class="k">on</span> <span class="n">t1</span><span class="p">.</span><span class="n">a</span> <span class="o">=</span> <span class="n">t2</span><span class="p">.</span><span class="n">a</span> 
+<span class="n">postgres</span><span class="o">-#</span> <span class="k">and</span> <span class="n">t2</span><span class="p">.</span><span class="n">d</span> <span class="o">&gt;</span> <span class="mi">1</span> <span class="k">and</span> <span class="n">t1</span><span class="p">.</span><span class="n">e</span> <span class="o">&gt;=</span> <span class="mi">2</span> 
+<span class="n">postgres</span><span class="o">-#</span> <span class="k">where</span> <span class="n">t1</span><span class="p">.</span><span class="n">b</span> <span class="o">&lt;</span> <span class="mi">50</span> 
+<span class="n">postgres</span><span class="o">-#</span> <span class="p">;</span>
+                                                  <span class="n">QUERY</span> <span class="n">PLAN</span>                                                  
+<span class="c1">--------------------------------------------------------------------------------------------------------------
+</span><span class="c1"></span> <span class="n">Hash</span> <span class="k">Left</span> <span class="k">Join</span>  <span class="p">(</span><span class="n">cost</span><span class="o">=</span><span class="mi">34</span><span class="p">.</span><span class="mi">90</span><span class="p">..</span><span class="mi">80</span><span class="p">.</span><span class="mi">00</span> <span class="k">rows</span><span class="o">=</span><span class="mi">181</span> <span class="n">width</span><span class="o">=</span><span class="mi">32</span><span class="p">)</span> <span class="p">(</span><span class="n">actual</span> <span class="n">time</span><span class="o">=</span><span class="mi">0</span><span class="p">.</span><span class="mi">021</span><span class="p">..</span><span class="mi">0</span><span class="p">.</span><span class="mi">035</span> <span class="k">rows</span><span class="o">=</span><span class="mi">4</span> <span class="n">loops</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+   <span class="n">Hash</span> <span class="n">Cond</span><span class="p">:</span> <span class="p">(</span><span class="s2">&#34;outer&#34;</span><span class="p">.</span><span class="n">a</span> <span class="o">=</span> <span class="s2">&#34;inner&#34;</span><span class="p">.</span><span class="n">a</span><span class="p">)</span>
+   <span class="k">Join</span> <span class="n">Filter</span><span class="p">:</span> <span class="p">(</span><span class="s2">&#34;outer&#34;</span><span class="p">.</span><span class="n">e</span> <span class="o">&gt;=</span> <span class="mi">2</span><span class="p">)</span>
+   <span class="o">-&gt;</span>  <span class="n">Seq</span> <span class="n">Scan</span> <span class="k">on</span> <span class="n">tmp1</span>  <span class="p">(</span><span class="n">cost</span><span class="o">=</span><span class="mi">0</span><span class="p">.</span><span class="mi">00</span><span class="p">..</span><span class="mi">34</span><span class="p">.</span><span class="mi">45</span> <span class="k">rows</span><span class="o">=</span><span class="mi">181</span> <span class="n">width</span><span class="o">=</span><span class="mi">16</span><span class="p">)</span> <span class="p">(</span><span class="n">actual</span> <span class="n">time</span><span class="o">=</span><span class="mi">0</span><span class="p">.</span><span class="mi">006</span><span class="p">..</span><span class="mi">0</span><span class="p">.</span><span class="mi">011</span> <span class="k">rows</span><span class="o">=</span><span class="mi">4</span> <span class="n">loops</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+         <span class="n">Filter</span><span class="p">:</span> <span class="p">((</span><span class="k">c</span> <span class="o">&gt;=</span> <span class="mi">1</span><span class="p">)</span> <span class="k">AND</span> <span class="p">(</span><span class="n">b</span> <span class="o">&lt;</span> <span class="mi">50</span><span class="p">))</span>
+   <span class="o">-&gt;</span>  <span class="n">Hash</span>  <span class="p">(</span><span class="n">cost</span><span class="o">=</span><span class="mi">34</span><span class="p">.</span><span class="mi">45</span><span class="p">..</span><span class="mi">34</span><span class="p">.</span><span class="mi">45</span> <span class="k">rows</span><span class="o">=</span><span class="mi">181</span> <span class="n">width</span><span class="o">=</span><span class="mi">16</span><span class="p">)</span> <span class="p">(</span><span class="n">actual</span> <span class="n">time</span><span class="o">=</span><span class="mi">0</span><span class="p">.</span><span class="mi">007</span><span class="p">..</span><span class="mi">0</span><span class="p">.</span><span class="mi">007</span> <span class="k">rows</span><span class="o">=</span><span class="mi">1</span> <span class="n">loops</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+         <span class="o">-&gt;</span>  <span class="n">Seq</span> <span class="n">Scan</span> <span class="k">on</span> <span class="n">tmp2</span>  <span class="p">(</span><span class="n">cost</span><span class="o">=</span><span class="mi">0</span><span class="p">.</span><span class="mi">00</span><span class="p">..</span><span class="mi">34</span><span class="p">.</span><span class="mi">45</span> <span class="k">rows</span><span class="o">=</span><span class="mi">181</span> <span class="n">width</span><span class="o">=</span><span class="mi">16</span><span class="p">)</span> <span class="p">(</span><span class="n">actual</span> <span class="n">time</span><span class="o">=</span><span class="mi">0</span><span class="p">.</span><span class="mi">002</span><span class="p">..</span><span class="mi">0</span><span class="p">.</span><span class="mi">003</span> <span class="k">rows</span><span class="o">=</span><span class="mi">1</span> <span class="n">loops</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+               <span class="n">Filter</span><span class="p">:</span> <span class="p">((</span><span class="n">b</span> <span class="o">&lt;</span> <span class="mi">30</span><span class="p">)</span> <span class="k">AND</span> <span class="p">(</span><span class="n">d</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">))</span>
+ <span class="n">Total</span> <span class="n">runtime</span><span class="p">:</span> <span class="mi">0</span><span class="p">.</span><span class="mi">063</span> <span class="n">ms</span>
+<span class="p">(</span><span class="mi">9</span> <span class="k">rows</span><span class="p">)</span>
+
+</code></pre></td></tr></table>
+</div>
+</div><p>​	执行计划分析：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-fallback" data-lang="fallback">1) 全表扫描左表TMP1，同时根据TMP1表子查询条件&#34;C&#34;&gt;=1和where过滤条件&#34;T1&#34;.&#34;B&#34;&lt;50联合过滤，即filter(&#34;TMP1&#34;.&#34;B&#34;&lt;50 AND &#34;C&#34;&gt;=1)，计算结果临时表记为tmp1；
+2) 全表扫描右表TMP2，同时根据TMP2表子查询条件&#34;B&#34;(+)&lt;30和on子句&#34;T2&#34;.&#34;D&#34;(+)&gt;1联合过滤，即filter(&#34;TMP2&#34;.&#34;D&#34;(+)&gt;1 AND &#34;B&#34;(+)&lt;30)，计算结果临时表记为tmp2；
+3) 左表TMP1及右表TMP2处理后临时表tmp1和tmp2通过access(&#34;TMP1&#34;.&#34;A&#34;=&#34;TMP2&#34;.&#34;A&#34;(+))连接条件进行Hash Left Join操作，左临时表结果集全量返回，右表不匹配行置为null，返回结果临时表记为tmp3；
+4) 返回结果集。
+</code></pre></td></tr></table>
+</div>
+</div><p>2、SQL示例2：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span><span class="lnt">9
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-sql" data-lang="sql"><span class="k">select</span> <span class="o">*</span> 
+<span class="k">from</span> <span class="p">(</span>
+<span class="k">select</span> <span class="o">*</span> <span class="k">from</span> <span class="n">tmp1</span> <span class="k">where</span> <span class="k">c</span> <span class="o">&gt;=</span> <span class="mi">1</span>
+<span class="p">)</span> <span class="n">t1</span> <span class="k">left</span> <span class="k">join</span> <span class="p">(</span>
+<span class="k">select</span> <span class="o">*</span> <span class="k">from</span> <span class="n">tmp2</span> <span class="k">where</span> <span class="n">b</span> <span class="o">&lt;</span> <span class="mi">30</span>
+<span class="p">)</span> <span class="n">t2</span> <span class="k">on</span> <span class="n">t1</span><span class="p">.</span><span class="n">a</span> <span class="o">=</span> <span class="n">t2</span><span class="p">.</span><span class="n">a</span> 
+<span class="k">and</span> <span class="n">t2</span><span class="p">.</span><span class="n">d</span> <span class="o">&gt;</span> <span class="mi">1</span> <span class="k">and</span> <span class="n">t1</span><span class="p">.</span><span class="n">e</span> <span class="o">&gt;=</span> <span class="mi">2</span> 
+<span class="k">where</span> <span class="n">t1</span><span class="p">.</span><span class="n">b</span> <span class="o">&lt;</span> <span class="mi">50</span> <span class="k">and</span> <span class="n">t2</span><span class="p">.</span><span class="n">e</span> <span class="o">&lt;=</span> <span class="mi">3</span> 
+<span class="p">;</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>​	Oracle示例：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span><span class="lnt">39
+</span><span class="lnt">40
+</span><span class="lnt">41
+</span><span class="lnt">42
+</span><span class="lnt">43
+</span><span class="lnt">44
+</span><span class="lnt">45
+</span><span class="lnt">46
+</span><span class="lnt">47
+</span><span class="lnt">48
+</span><span class="lnt">49
+</span><span class="lnt">50
+</span><span class="lnt">51
+</span><span class="lnt">52
+</span><span class="lnt">53
+</span><span class="lnt">54
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-sql" data-lang="sql"><span class="k">SQL</span><span class="o">&gt;</span> <span class="k">select</span> <span class="o">*</span> 
+<span class="k">from</span> <span class="p">(</span>
+<span class="k">select</span> <span class="o">*</span> <span class="k">from</span> <span class="n">tmp1</span> <span class="k">where</span> <span class="k">c</span> <span class="o">&gt;=</span> <span class="mi">1</span>
+<span class="p">)</span> <span class="n">t1</span> <span class="k">left</span> <span class="k">join</span> <span class="p">(</span>
+<span class="k">select</span> <span class="o">*</span> <span class="k">from</span> <span class="n">tmp2</span> <span class="k">where</span> <span class="n">b</span> <span class="o">&lt;</span> <span class="mi">30</span>
+<span class="p">)</span> <span class="n">t2</span> <span class="k">on</span> <span class="n">t1</span><span class="p">.</span><span class="n">a</span> <span class="o">=</span> <span class="n">t2</span><span class="p">.</span><span class="n">a</span> 
+<span class="k">and</span> <span class="n">t2</span><span class="p">.</span><span class="n">d</span> <span class="o">&gt;</span> <span class="mi">1</span> <span class="k">and</span> <span class="n">t1</span><span class="p">.</span><span class="n">e</span> <span class="o">&gt;=</span> <span class="mi">2</span> 
+<span class="k">where</span> <span class="n">t1</span><span class="p">.</span><span class="n">b</span> <span class="o">&lt;</span> <span class="mi">50</span> <span class="k">and</span> <span class="n">t2</span><span class="p">.</span><span class="n">e</span> <span class="o">&lt;=</span> <span class="mi">3</span> 
+<span class="p">;</span>
+
+	 <span class="n">A</span>	    <span class="n">B</span>	       <span class="k">C</span>	  <span class="n">E</span>	     <span class="n">A</span>		<span class="n">B</span>	   <span class="n">D</span>	      <span class="n">E</span>
+<span class="c1">---------- ---------- ---------- ---------- ---------- ---------- ---------- ----------
+</span><span class="c1"></span>	 <span class="mi">2</span>	   <span class="mi">20</span>	       <span class="mi">2</span>	  <span class="mi">2</span>	     <span class="mi">2</span>	       <span class="mi">20</span>	   <span class="mi">2</span>	      <span class="mi">2</span>
+
+
+<span class="n">Execution</span> <span class="n">Plan</span>
+<span class="c1">----------------------------------------------------------
+</span><span class="c1"></span><span class="n">Plan</span> <span class="n">hash</span> <span class="n">value</span><span class="p">:</span> <span class="mi">1630095649</span>
+
+<span class="c1">---------------------------------------------------------------------------
+</span><span class="c1"></span><span class="o">|</span> <span class="n">Id</span>  <span class="o">|</span> <span class="k">Operation</span>	   <span class="o">|</span> <span class="n">Name</span> <span class="o">|</span> <span class="k">Rows</span>  <span class="o">|</span> <span class="n">Bytes</span> <span class="o">|</span> <span class="n">Cost</span> <span class="p">(</span><span class="o">%</span><span class="n">CPU</span><span class="p">)</span><span class="o">|</span> <span class="n">Time</span>	  <span class="o">|</span>
+<span class="c1">---------------------------------------------------------------------------
+</span><span class="c1"></span><span class="o">|</span>   <span class="mi">0</span> <span class="o">|</span> <span class="k">SELECT</span> <span class="k">STATEMENT</span>   <span class="o">|</span>	  <span class="o">|</span>	<span class="mi">1</span> <span class="o">|</span>   <span class="mi">104</span> <span class="o">|</span>	<span class="mi">7</span>  <span class="p">(</span><span class="mi">15</span><span class="p">)</span><span class="o">|</span> <span class="mi">00</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="mi">01</span> <span class="o">|</span>
+<span class="o">|*</span>  <span class="mi">1</span> <span class="o">|</span>  <span class="n">HASH</span> <span class="k">JOIN</span>	   <span class="o">|</span>	  <span class="o">|</span>	<span class="mi">1</span> <span class="o">|</span>   <span class="mi">104</span> <span class="o">|</span>	<span class="mi">7</span>  <span class="p">(</span><span class="mi">15</span><span class="p">)</span><span class="o">|</span> <span class="mi">00</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="mi">01</span> <span class="o">|</span>
+<span class="o">|*</span>  <span class="mi">2</span> <span class="o">|</span>   <span class="k">TABLE</span> <span class="k">ACCESS</span> <span class="k">FULL</span><span class="o">|</span> <span class="n">TMP2</span> <span class="o">|</span>	<span class="mi">1</span> <span class="o">|</span>    <span class="mi">52</span> <span class="o">|</span>	<span class="mi">3</span>   <span class="p">(</span><span class="mi">0</span><span class="p">)</span><span class="o">|</span> <span class="mi">00</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="mi">01</span> <span class="o">|</span>
+<span class="o">|*</span>  <span class="mi">3</span> <span class="o">|</span>   <span class="k">TABLE</span> <span class="k">ACCESS</span> <span class="k">FULL</span><span class="o">|</span> <span class="n">TMP1</span> <span class="o">|</span>	<span class="mi">3</span> <span class="o">|</span>   <span class="mi">156</span> <span class="o">|</span>	<span class="mi">3</span>   <span class="p">(</span><span class="mi">0</span><span class="p">)</span><span class="o">|</span> <span class="mi">00</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="mi">01</span> <span class="o">|</span>
+<span class="c1">---------------------------------------------------------------------------
+</span><span class="c1"></span>
+<span class="n">Predicate</span> <span class="n">Information</span> <span class="p">(</span><span class="n">identified</span> <span class="k">by</span> <span class="k">operation</span> <span class="n">id</span><span class="p">):</span>
+<span class="c1">---------------------------------------------------
+</span><span class="c1"></span>
+   <span class="mi">1</span> <span class="o">-</span> <span class="k">access</span><span class="p">(</span><span class="s2">&#34;TMP1&#34;</span><span class="p">.</span><span class="s2">&#34;A&#34;</span><span class="o">=</span><span class="s2">&#34;TMP2&#34;</span><span class="p">.</span><span class="s2">&#34;A&#34;</span><span class="p">)</span>
+   <span class="mi">2</span> <span class="o">-</span> <span class="n">filter</span><span class="p">(</span><span class="s2">&#34;TMP2&#34;</span><span class="p">.</span><span class="s2">&#34;E&#34;</span><span class="o">&lt;=</span><span class="mi">3</span> <span class="k">AND</span> <span class="s2">&#34;TMP2&#34;</span><span class="p">.</span><span class="s2">&#34;D&#34;</span><span class="o">&gt;</span><span class="mi">1</span> <span class="k">AND</span> <span class="s2">&#34;B&#34;</span><span class="o">&lt;</span><span class="mi">30</span><span class="p">)</span>
+   <span class="mi">3</span> <span class="o">-</span> <span class="n">filter</span><span class="p">(</span><span class="s2">&#34;TMP1&#34;</span><span class="p">.</span><span class="s2">&#34;B&#34;</span><span class="o">&lt;</span><span class="mi">50</span> <span class="k">AND</span> <span class="s2">&#34;TMP1&#34;</span><span class="p">.</span><span class="s2">&#34;E&#34;</span><span class="o">&gt;=</span><span class="mi">2</span> <span class="k">AND</span> <span class="s2">&#34;C&#34;</span><span class="o">&gt;=</span><span class="mi">1</span><span class="p">)</span>
+
+<span class="n">Note</span>
+<span class="c1">-----
+</span><span class="c1"></span>   <span class="o">-</span> <span class="k">dynamic</span> <span class="n">sampling</span> <span class="n">used</span> <span class="k">for</span> <span class="n">this</span> <span class="k">statement</span> <span class="p">(</span><span class="k">level</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+
+
+<span class="k">Statistics</span>
+<span class="c1">----------------------------------------------------------
+</span><span class="c1"></span>	  <span class="mi">9</span>  <span class="k">recursive</span> <span class="n">calls</span>
+	  <span class="mi">0</span>  <span class="n">db</span> <span class="n">block</span> <span class="n">gets</span>
+	 <span class="mi">15</span>  <span class="n">consistent</span> <span class="n">gets</span>
+	  <span class="mi">0</span>  <span class="n">physical</span> <span class="k">reads</span>
+	  <span class="mi">0</span>  <span class="n">redo</span> <span class="k">size</span>
+	<span class="mi">981</span>  <span class="n">bytes</span> <span class="n">sent</span> <span class="n">via</span> <span class="k">SQL</span><span class="o">*</span><span class="n">Net</span> <span class="k">to</span> <span class="n">client</span>
+	<span class="mi">524</span>  <span class="n">bytes</span> <span class="n">received</span> <span class="n">via</span> <span class="k">SQL</span><span class="o">*</span><span class="n">Net</span> <span class="k">from</span> <span class="n">client</span>
+	  <span class="mi">2</span>  <span class="k">SQL</span><span class="o">*</span><span class="n">Net</span> <span class="n">roundtrips</span> <span class="k">to</span><span class="o">/</span><span class="k">from</span> <span class="n">client</span>
+	  <span class="mi">0</span>  <span class="n">sorts</span> <span class="p">(</span><span class="n">memory</span><span class="p">)</span>
+	  <span class="mi">0</span>  <span class="n">sorts</span> <span class="p">(</span><span class="n">disk</span><span class="p">)</span>
+	  <span class="mi">1</span>  <span class="k">rows</span> <span class="n">processed</span>
+
+</code></pre></td></tr></table>
+</div>
+</div><p>​	PostgreSQL示例：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-sql" data-lang="sql"><span class="n">postgres</span><span class="o">=#</span> <span class="k">select</span> <span class="o">*</span> 
+<span class="n">postgres</span><span class="o">-#</span> <span class="k">from</span> <span class="p">(</span>
+<span class="n">postgres</span><span class="p">(</span><span class="o">#</span> <span class="k">select</span> <span class="o">*</span> <span class="k">from</span> <span class="n">tmp1</span> <span class="k">where</span> <span class="k">c</span> <span class="o">&gt;=</span> <span class="mi">1</span>
+<span class="n">postgres</span><span class="p">(</span><span class="o">#</span> <span class="p">)</span> <span class="n">t1</span> <span class="k">left</span> <span class="k">join</span> <span class="p">(</span>
+<span class="n">postgres</span><span class="p">(</span><span class="o">#</span> <span class="k">select</span> <span class="o">*</span> <span class="k">from</span> <span class="n">tmp2</span> <span class="k">where</span> <span class="n">b</span> <span class="o">&lt;</span> <span class="mi">30</span>
+<span class="n">postgres</span><span class="p">(</span><span class="o">#</span> <span class="p">)</span> <span class="n">t2</span> <span class="k">on</span> <span class="n">t1</span><span class="p">.</span><span class="n">a</span> <span class="o">=</span> <span class="n">t2</span><span class="p">.</span><span class="n">a</span> 
+<span class="n">postgres</span><span class="o">-#</span> <span class="k">and</span> <span class="n">t2</span><span class="p">.</span><span class="n">d</span> <span class="o">&gt;</span> <span class="mi">1</span> <span class="k">and</span> <span class="n">t1</span><span class="p">.</span><span class="n">e</span> <span class="o">&gt;=</span> <span class="mi">2</span> 
+<span class="n">postgres</span><span class="o">-#</span> <span class="k">where</span> <span class="n">t1</span><span class="p">.</span><span class="n">b</span> <span class="o">&lt;</span> <span class="mi">50</span> <span class="k">and</span> <span class="n">t2</span><span class="p">.</span><span class="n">e</span> <span class="o">&lt;=</span> <span class="mi">3</span> 
+<span class="n">postgres</span><span class="o">-#</span> <span class="p">;</span>
+ <span class="n">a</span> <span class="o">|</span> <span class="n">b</span>  <span class="o">|</span> <span class="k">c</span> <span class="o">|</span> <span class="n">e</span> <span class="o">|</span> <span class="n">a</span> <span class="o">|</span> <span class="n">b</span>  <span class="o">|</span> <span class="n">d</span> <span class="o">|</span> <span class="n">e</span> 
+<span class="c1">---+----+---+---+---+----+---+---
+</span><span class="c1"></span> <span class="mi">2</span> <span class="o">|</span> <span class="mi">20</span> <span class="o">|</span> <span class="mi">2</span> <span class="o">|</span> <span class="mi">2</span> <span class="o">|</span> <span class="mi">2</span> <span class="o">|</span> <span class="mi">20</span> <span class="o">|</span> <span class="mi">2</span> <span class="o">|</span> <span class="mi">2</span>
+<span class="p">(</span><span class="mi">1</span> <span class="k">row</span><span class="p">)</span>
+
+<span class="n">postgres</span><span class="o">=#</span> <span class="k">explain</span> <span class="k">analyze</span> <span class="k">select</span> <span class="o">*</span> 
+<span class="n">postgres</span><span class="o">-#</span> <span class="k">from</span> <span class="p">(</span>
+<span class="n">postgres</span><span class="p">(</span><span class="o">#</span> <span class="k">select</span> <span class="o">*</span> <span class="k">from</span> <span class="n">tmp1</span> <span class="k">where</span> <span class="k">c</span> <span class="o">&gt;=</span> <span class="mi">1</span>
+<span class="n">postgres</span><span class="p">(</span><span class="o">#</span> <span class="p">)</span> <span class="n">t1</span> <span class="k">left</span> <span class="k">join</span> <span class="p">(</span>
+<span class="n">postgres</span><span class="p">(</span><span class="o">#</span> <span class="k">select</span> <span class="o">*</span> <span class="k">from</span> <span class="n">tmp2</span> <span class="k">where</span> <span class="n">b</span> <span class="o">&lt;</span> <span class="mi">30</span>
+<span class="n">postgres</span><span class="p">(</span><span class="o">#</span> <span class="p">)</span> <span class="n">t2</span> <span class="k">on</span> <span class="n">t1</span><span class="p">.</span><span class="n">a</span> <span class="o">=</span> <span class="n">t2</span><span class="p">.</span><span class="n">a</span> 
+<span class="n">postgres</span><span class="o">-#</span> <span class="k">and</span> <span class="n">t2</span><span class="p">.</span><span class="n">d</span> <span class="o">&gt;</span> <span class="mi">1</span> <span class="k">and</span> <span class="n">t1</span><span class="p">.</span><span class="n">e</span> <span class="o">&gt;=</span> <span class="mi">2</span> 
+<span class="n">postgres</span><span class="o">-#</span> <span class="k">where</span> <span class="n">t1</span><span class="p">.</span><span class="n">b</span> <span class="o">&lt;</span> <span class="mi">50</span> <span class="k">and</span> <span class="n">t2</span><span class="p">.</span><span class="n">e</span> <span class="o">&lt;=</span> <span class="mi">3</span> 
+<span class="n">postgres</span><span class="o">-#</span> <span class="p">;</span>
+                                                 <span class="n">QUERY</span> <span class="n">PLAN</span>                                                  
+<span class="c1">-------------------------------------------------------------------------------------------------------------
+</span><span class="c1"></span> <span class="n">Hash</span> <span class="k">Join</span>  <span class="p">(</span><span class="n">cost</span><span class="o">=</span><span class="mi">38</span><span class="p">.</span><span class="mi">68</span><span class="p">..</span><span class="mi">78</span><span class="p">.</span><span class="mi">43</span> <span class="k">rows</span><span class="o">=</span><span class="mi">18</span> <span class="n">width</span><span class="o">=</span><span class="mi">32</span><span class="p">)</span> <span class="p">(</span><span class="n">actual</span> <span class="n">time</span><span class="o">=</span><span class="mi">0</span><span class="p">.</span><span class="mi">033</span><span class="p">..</span><span class="mi">0</span><span class="p">.</span><span class="mi">041</span> <span class="k">rows</span><span class="o">=</span><span class="mi">1</span> <span class="n">loops</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+   <span class="n">Hash</span> <span class="n">Cond</span><span class="p">:</span> <span class="p">(</span><span class="s2">&#34;outer&#34;</span><span class="p">.</span><span class="n">a</span> <span class="o">=</span> <span class="s2">&#34;inner&#34;</span><span class="p">.</span><span class="n">a</span><span class="p">)</span>
+   <span class="o">-&gt;</span>  <span class="n">Seq</span> <span class="n">Scan</span> <span class="k">on</span> <span class="n">tmp1</span>  <span class="p">(</span><span class="n">cost</span><span class="o">=</span><span class="mi">0</span><span class="p">.</span><span class="mi">00</span><span class="p">..</span><span class="mi">38</span><span class="p">.</span><span class="mi">53</span> <span class="k">rows</span><span class="o">=</span><span class="mi">60</span> <span class="n">width</span><span class="o">=</span><span class="mi">16</span><span class="p">)</span> <span class="p">(</span><span class="n">actual</span> <span class="n">time</span><span class="o">=</span><span class="mi">0</span><span class="p">.</span><span class="mi">007</span><span class="p">..</span><span class="mi">0</span><span class="p">.</span><span class="mi">011</span> <span class="k">rows</span><span class="o">=</span><span class="mi">3</span> <span class="n">loops</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+         <span class="n">Filter</span><span class="p">:</span> <span class="p">((</span><span class="k">c</span> <span class="o">&gt;=</span> <span class="mi">1</span><span class="p">)</span> <span class="k">AND</span> <span class="p">(</span><span class="n">e</span> <span class="o">&gt;=</span> <span class="mi">2</span><span class="p">)</span> <span class="k">AND</span> <span class="p">(</span><span class="n">b</span> <span class="o">&lt;</span> <span class="mi">50</span><span class="p">))</span>
+   <span class="o">-&gt;</span>  <span class="n">Hash</span>  <span class="p">(</span><span class="n">cost</span><span class="o">=</span><span class="mi">38</span><span class="p">.</span><span class="mi">53</span><span class="p">..</span><span class="mi">38</span><span class="p">.</span><span class="mi">53</span> <span class="k">rows</span><span class="o">=</span><span class="mi">60</span> <span class="n">width</span><span class="o">=</span><span class="mi">16</span><span class="p">)</span> <span class="p">(</span><span class="n">actual</span> <span class="n">time</span><span class="o">=</span><span class="mi">0</span><span class="p">.</span><span class="mi">008</span><span class="p">..</span><span class="mi">0</span><span class="p">.</span><span class="mi">008</span> <span class="k">rows</span><span class="o">=</span><span class="mi">1</span> <span class="n">loops</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+         <span class="o">-&gt;</span>  <span class="n">Seq</span> <span class="n">Scan</span> <span class="k">on</span> <span class="n">tmp2</span>  <span class="p">(</span><span class="n">cost</span><span class="o">=</span><span class="mi">0</span><span class="p">.</span><span class="mi">00</span><span class="p">..</span><span class="mi">38</span><span class="p">.</span><span class="mi">53</span> <span class="k">rows</span><span class="o">=</span><span class="mi">60</span> <span class="n">width</span><span class="o">=</span><span class="mi">16</span><span class="p">)</span> <span class="p">(</span><span class="n">actual</span> <span class="n">time</span><span class="o">=</span><span class="mi">0</span><span class="p">.</span><span class="mi">003</span><span class="p">..</span><span class="mi">0</span><span class="p">.</span><span class="mi">005</span> <span class="k">rows</span><span class="o">=</span><span class="mi">1</span> <span class="n">loops</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+               <span class="n">Filter</span><span class="p">:</span> <span class="p">((</span><span class="n">b</span> <span class="o">&lt;</span> <span class="mi">30</span><span class="p">)</span> <span class="k">AND</span> <span class="p">(</span><span class="n">d</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">)</span> <span class="k">AND</span> <span class="p">(</span><span class="n">e</span> <span class="o">&lt;=</span> <span class="mi">3</span><span class="p">))</span>
+ <span class="n">Total</span> <span class="n">runtime</span><span class="p">:</span> <span class="mi">0</span><span class="p">.</span><span class="mi">070</span> <span class="n">ms</span>
+<span class="p">(</span><span class="mi">8</span> <span class="k">rows</span><span class="p">)</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>​	执行计划分析：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-fallback" data-lang="fallback">1) 全表扫描左表TMP2，同时根据TMP2表子查询条件&#34;B&#34;&lt;30和where过滤条件&#34;TMP2&#34;.&#34;E&#34;&lt;=3及ON子句过滤条件&#34;TMP2&#34;.&#34;D&#34;&gt;1联合过滤，即filter(&#34;TMP2&#34;.&#34;E&#34;&lt;=3 AND &#34;TMP2&#34;.&#34;D&#34;&gt;1 AND &#34;B&#34;&lt;30)，计算结果临时表记为tmp1；
+2) 全表扫描右表TMP1，同时根据TMP1表子查询条件&#34;C&#34;&gt;=1和where子句过滤条件&#34;TMP1&#34;.&#34;B&#34;&lt;50及ON子句&#34;TMP1&#34;.&#34;E&#34;&gt;=2联合过滤，即filter(&#34;TMP1&#34;.&#34;B&#34;&lt;50 AND &#34;TMP1&#34;.&#34;E&#34;&gt;=2 AND &#34;C&#34;&gt;=1)，计算结果临时表记为tmp2；
+3) 临时表tmp1和tmp2通过access(&#34;TMP1&#34;.&#34;A&#34;=&#34;TMP2&#34;.&#34;A&#34;)连接条件进行Hash Join连接操作（此处left join写法已经被转换为内链接），返回匹配结果临时表记为tmp3；
+4) 返回结果集。
+
+</code></pre></td></tr></table>
+</div>
+</div>
     </div>
 
     <div class="post-copyright">
@@ -358,7 +601,7 @@ Total runtime: 0.070 ms
   <p class="copyright-item">
     <span class="item-title">上次更新</span>
     <span class="item-content">
-        11110-08-08 01:01:01
+        2020-08-11 01:37
         
     </span>
   </p>
@@ -385,9 +628,9 @@ Total runtime: 0.070 ms
           <a href="/tags/%E4%BC%98%E5%8C%96/">优化</a>
           </div>
       <nav class="post-nav">
-        <a class="prev" href="/post/dw/supserset%E5%AE%89%E8%A3%85%E9%83%A8%E7%BD%B2/">
+        <a class="prev" href="/post/java/Spark%E6%A0%B8%E5%BF%83%E7%AE%97%E5%AD%90/">
             <i class="iconfont icon-left"></i>
-            <span class="prev-text nav-default">Superset安装部署</span>
+            <span class="prev-text nav-default">Spark核心算子</span>
             <span class="prev-text nav-mobile">上一篇</span>
           </a>
         <a class="next" href="/post/dw/%E5%A2%9E%E9%87%8FETL-%E9%95%BF%E5%91%A8%E6%9C%9F%E6%8C%87%E6%A0%87-%E4%BC%98%E5%8C%96%E6%96%B9%E6%A1%88/">
@@ -447,7 +690,7 @@ Total runtime: 0.070 ms
       <i class="iconfont icon-up"></i>
     </div>
   </div>
-  <script src="/lib/highlight/highlight.pack.js?v=20171001"></script>
+  
   <script src="https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
   <script src="https://cdn.jsdelivr.net/npm/slideout@1.0.1/dist/slideout.min.js" integrity="sha256-t+zJ/g8/KXIJMjSVQdnibt4dlaDxc9zXr/9oNPeWqdg=" crossorigin="anonymous"></script>
   <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.js" integrity="sha256-XVLffZaxoWfGUEbdzuLi7pwaUJv1cecsQJQqGLe7axY=" crossorigin="anonymous"></script>
